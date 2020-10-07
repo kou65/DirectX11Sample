@@ -1,0 +1,9 @@
+﻿  Key.cpp
+  Lib.cpp
+  Main.cpp
+C:\Users\前川　洸太郎\Documents\DirectX11Sample\DirectX11Sample\DirectX11Sample\Lib\Math\Math.h(16,32): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+  Math.cpp
+C:\Users\前川　洸太郎\Documents\DirectX11Sample\DirectX11Sample\DirectX11Sample\Lib\Math\Math.h(16,32): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+  Surface2D.cpp
+  コードを生成中...
+  DirectX11Sample.vcxproj -> C:\Users\前川　洸太郎\Documents\DirectX11Sample\DirectX11Sample\x64\Debug\DirectX11Sample.exe
