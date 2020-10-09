@@ -74,6 +74,16 @@ namespace Math {
 			}
 		}
 
+		void ClearXMFLOAT4X4(
+			XMFLOAT4X4* out
+		) {
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 4; j++) {
+					out->m[i][j] = 0.f;
+				}
+			}
+		}
+
 		bool IsXMFLOAT4X4Match(
 			const XMFLOAT4X4& m1,
 			const XMFLOAT4X4& m2
@@ -88,6 +98,53 @@ namespace Math {
 			}
 
 			return true;
+		}
+
+
+		void InverseMatrixSweepingMethod(
+			XMFLOAT4X4*inv_a,
+			XMFLOAT4X4&a
+		) {
+
+			// 行列の基本変形
+			// 一つの行列を何倍かする(0倍は含まない)
+			// 二つの行列を入れ替える
+			// 一つの行に他の行の何倍かを加える
+			
+			// 右に単位行列を設置し、
+			// 左にある行列を単位行列にする
+			// A I → I X
+			// その結果 X行列が逆行列となる
+
+			//double a[4][4] = { {1,2,0,-1},{-1,1,2,0},{2,0,1,1},{1,-2,-1,1} }; //入力用の配列
+			//double inv_a[4][4]; //ここに逆行列が入る
+			double buf; //一時的なデータを蓄える
+			int i, j, k; //カウンタ
+			int n = 4;  //配列の次数
+
+			//単位行列を作る
+			for (i = 0; i < n; i++) {
+				for (j = 0; j < n; j++) {
+					inv_a->m[i][j] = (i == j) ? 1.0 : 0.0;
+				}
+			}
+			//掃き出し法
+			for (i = 0; i < n; i++) {
+				buf = 1 / a.m[i][i];
+				for (j = 0; j < n; j++) {
+					a.m[i][j] *= buf;
+					inv_a->m[i][j] *= buf;
+				}
+				for (j = 0; j < n; j++) {
+					if (i != j) {
+						buf = a.m[j][i];
+						for (k = 0; k < n; k++) {
+							a.m[j][k] -= a.m[i][k] * buf;
+							inv_a->m[j][k] -= inv_a->m[i][k] * buf;
+						}
+					}
+				}
+			}
 		}
 
 
@@ -169,18 +226,14 @@ namespace Math {
 		void IdentityMatrix(
 			XMFLOAT4X4* out
 		) {
-			for (int i = 0; i < 4; i++) {
-				for (int j = 0; j < 4; j++) {
 
-					out->m[i][j] = 0;
-				}
-			}
+			out->_11 = 1.f; out->_12 = 0.f; out->_13 = 0.f; out->_14 = 0.f;
+			out->_21 = 0.f; out->_22 = 1.f; out->_23 = 0.f; out->_24 = 0.f;
+			out->_31 = 0.f; out->_32 = 0.f; out->_33 = 1.f; out->_34 = 0.f;
+			out->_41 = 0.f; out->_42 = 0.f; out->_43 = 0.f; out->_44 = 1.f;
 
-			out->_11 = 1.f;
-			out->_22 = 1.f;
-			out->_33 = 1.f;
-			out->_44 = 1.f;
 		}
+
 
 		void MultipleXMFLOAT4X4(
 			XMFLOAT4X4* out,
@@ -193,6 +246,9 @@ namespace Math {
 			// (行3 * 列1) + (行3 * 列2) + (行3 * 列3) + (行3 * 列4)
 			// (行4 * 列1) + (行4 * 列2) + (行4 * 列3) + (行4 * 列4)
 
+			// 全て0にする
+			ClearXMFLOAT4X4(out);
+
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 4; j++) {
 					for (int k = 0; k < 4; k++) {
@@ -200,35 +256,65 @@ namespace Math {
 						// (i行 * k列i行) * 4
 						out->m[i][j]
 							+=
-							
 							// 行
 							mat1.m[i][k] *
 							mat2.m[k][i];
+
 					}
+
 				}
 			}
 			
 		}
 
+		void TestMultipleXMFLOAT4X4(
+			XMFLOAT4X4* out,
+			XMFLOAT4X4& mat1,
+			XMFLOAT4X4& mat2
+		) {
+			float m = 0.f;
+
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 4; j++) {
+					for (int k = 0; k < 4; k++) {
+
+						m +=
+							// 行
+							mat1.m[i][k] *
+							mat2.m[k][i];
+					}
+
+					out->m[i][j] = m;
+					m = 0.f;
+				}
+			}
+
+		}
 
 		void TSMatrixTranslation(
-			XMFLOAT4X4* out_mat,
-			XMFLOAT3& trans
+			XMFLOAT4X4* out,
+			const XMFLOAT3& trans
 		) {
 
-			out_mat->_41 = trans.x;
-			out_mat->_42 = trans.y;
-			out_mat->_43 = trans.z;
+			// _41 _42 _43
+			out->_11 = 1.f; out->_12 = 0.f; out->_13 = 0.f; out->_14 = 0.f;
+			out->_21 = 0.f; out->_22 = 1.f; out->_23 = 0.f; out->_24 = 0.f;
+			out->_31 = 0.f; out->_32 = 0.f; out->_33 = 1.f; out->_34 = 0.f;
+			out->_41 = trans.x; out->_42 = trans.y; out->_43 = trans.z; out->_44 = 1.f;
 		}
 
 
-		void TSMatrixScailing(
-			XMFLOAT4X4* out_mat,
-			XMFLOAT3& float3
+		void TSMatrixScale(
+			XMFLOAT4X4* out,
+			const XMFLOAT3& float3
 		) {
-			out_mat->_11 = float3.x;
-			out_mat->_22 = float3.y;
-			out_mat->_33 = float3.z;
+
+			// _11 _22 _33
+			out->_11 = float3.x; out->_12 = 0.f; out->_13 = 0.f; out->_14 = 0.f;
+			out->_21 = 0.f; out->_22 = float3.y; out->_23 = 0.f; out->_24 = 0.f;
+			out->_31 = 0.f; out->_32 = 0.f; out->_33 = float3.z; out->_34 = 0.f;
+			out->_41 = 0.f; out->_42 = 0.f; out->_43 = 0.f; out->_44 = 1.f;
+
 		}
 
 
@@ -327,6 +413,46 @@ namespace Math {
 		}
 
 
+		void TsSRTRotationZYXMatrix(
+			XMFLOAT4X4*out_mat,
+			const XMFLOAT3& pos,
+			const XMFLOAT3& rotation,
+			const XMFLOAT3& get_scale
+		) {
+
+			XMFLOAT4X4 trans, scale;
+			XMFLOAT4X4 rot_x, rot_y, rot_z,total_rot;
+
+			// 単位化
+			IdentityMatrix(&total_rot);
+			IdentityMatrix(&trans);
+			IdentityMatrix(&scale);
+			IdentityMatrix(&rot_x);
+			IdentityMatrix(&rot_y);
+			IdentityMatrix(&rot_z);
+
+			// 移動
+			TSMatrixTranslation(&trans, pos);
+
+			// 拡縮
+			TSMatrixScale(&scale, get_scale);
+
+			// 回転
+			TSMatrixRotationXDegrees(&rot_x, rotation.x);
+			TSMatrixRotationYDegrees(&rot_y, rotation.y);
+			TSMatrixRotationZDegrees(&rot_z, rotation.z);
+			
+			// 回転行列作成
+			MultipleXMFLOAT4X4(&total_rot, rot_z,rot_y);
+			MultipleXMFLOAT4X4(&total_rot, total_rot, rot_x);
+
+			// 拡縮 * 回転 * 移動
+			MultipleXMFLOAT4X4(out_mat, scale, total_rot);
+			MultipleXMFLOAT4X4(out_mat, *out_mat, trans);
+
+		}
+
+
 		void TSViewMatrix(
 			XMFLOAT4X4*out_mat,
 			XMFLOAT3& pos,
@@ -374,6 +500,163 @@ namespace Math {
 
 			// 単位ベクトル化
 			CalcNormalize(y_axis);
+
+			out_mat->_11 = x_axis.x;
+			out_mat->_12 = x_axis.y;
+			out_mat->_13 = x_axis.z;
+			out_mat->_14 = 0;
+
+			out_mat->_21 = y_axis.x;
+			out_mat->_22 = y_axis.y;
+			out_mat->_23 = y_axis.z;
+			out_mat->_24 = 0;
+
+			out_mat->_31 = z_axis.x;
+			out_mat->_32 = z_axis.y;
+			out_mat->_33 = z_axis.z;
+			out_mat->_34 = 0;
+
+			// カメラの座標軸とカメラ座標の内積を行う
+			//  = 移動値が出せる
+			// cosからその方向の移動値が出せる
+			XMFLOAT3 vec;
+
+			float p_x = 0.f,p_y = 0.f,p_z = 0.f;
+
+			Dot::DotXMFLOAT3(&p_x, pos, x_axis);
+			Dot::DotXMFLOAT3(&p_y, pos, x_axis);
+			Dot::DotXMFLOAT3(&p_z, pos, x_axis);
+
+			// 各行に代入する
+			out_mat->_41 = p_x;
+			out_mat->_42 = p_y;
+			out_mat->_43 = p_z;
+			out_mat->_44 = 1;
+
+			// カメラを原点とするためには
+			// 逆行列する必要がある
+			// 逆行列とは単位行列に戻す行列
+			// ワールド原点に戻す
+			
+			XMFLOAT4X4 inv;
+
+			// 逆行列作成
+			// 列行
+			inv._11 = x_axis.x;
+			inv._21 = x_axis.y;
+			inv._31 = x_axis.z;
+			inv._41 = 0.f;
+
+			inv._12 = y_axis.x;
+			inv._22 = y_axis.y;
+			inv._32 = y_axis.z;
+			inv._42 = 0.f;
+
+			inv._13 = z_axis.x;
+			inv._23 = z_axis.y;
+			inv._33 = z_axis.z;
+			inv._43 = 0.f;
+
+			inv._14 = -p_x;
+			inv._24 = -p_y;
+			inv._34 = -p_z;
+			inv._44 = 1.f;
+
+			// 原点(オリジン)の位置に戻す
+			MultipleXMFLOAT4X4(out_mat, *out_mat, inv);
+		}
+
+		void TSInverseViewMatrix(
+			XMFLOAT4X4* out,
+			XMFLOAT4X4& in
+		) {
+
+
+		}
+
+
+		void TSProjectionMatrix(
+			XMFLOAT4X4* out,
+			float angle, // 視野角
+			float aspact,// アスペクト比
+			float _far,  // クリップ値(far)
+			float _near  // クリップ値(near)
+		) {
+
+			/*
+			  プロジェクション行列作成情報
+			  遠近感を作る行列
+			  奥にあるほど縮める、近い物ほど大きくする
+			  それが視推台という考え方
+
+			  aspact = 投影する空間の縦横の比率
+
+			  angle = 視野角
+
+			  near = 前方クリップ面
+
+			  far = 後方クリップ面
+
+			*/
+
+			// ScaleX
+			out->_11 = (1 / tanf(angle / 2)) / aspact;
+			out->_12 = 0.f;
+			out->_13 = 0.f;
+			out->_14 = 0.f;
+
+			// ScaleY(画角による拡縮の値)
+			out->_21 = 0.f;
+			out->_22 = (1 / tanf(angle / 2));
+			out->_23 = 0.f;
+			out->_24 = 0.f;
+
+			// ScaleZ
+			out->_31 = 0.f;
+			out->_32 = 0.f;
+			out->_33 = (1 / (_far - _near) * _far);
+			// 1(z値の拡縮に使うため)
+			out->_34 = 1;
+
+			out->_41 = 0.f;
+			out->_42 = 0.f;
+			// 移動z
+			out->_43 = -_near / (_far - _near) * _far;
+			out->_44 = 0.f;
+		}
+
+
+		void TSScreenMatrix(
+			XMFLOAT4X4*out,
+			float width,
+			float height
+		) {
+
+			// クリップ空間からスクリーンに
+			// 表示するためスクリーンに変換する
+
+			// 拡大率、平行移動値のx,y成分にウィンドウサイズ / 2を設定する
+			// これによって原点が左上に移動し、y軸も下が+に変換される
+
+			out->_11 = width / 2;
+			out->_12 = 0.f;
+			out->_13 = 0.f;
+			out->_14 = 0.f;
+
+			out->_21 = 0.f;
+			out->_22 = -(height / 2);
+			out->_23 = 0.f;
+			out->_24 = 0.f;
+
+			out->_31 = 0.f;
+			out->_32 = 0.f;
+			out->_33 = 1.f;
+			out->_34 = 0.f;
+
+			out->_41 = width / 2;
+			out->_42 = height / 2;
+			out->_43 = 0.f;
+			out->_44 = 1.f;
 		}
 	}
 

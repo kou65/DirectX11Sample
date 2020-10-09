@@ -40,7 +40,7 @@ int WINAPI WinMain(
 		vec.y = 3.f;
 		vec.z = 2.f;
 
-		Math::TS_XMFLOAT4X4::TSMatrixScailing(&scale, vec);
+		Math::TS_XMFLOAT4X4::TSMatrixScale(&scale, vec);
 
 
 		Math::TS_XMFLOAT4X4::MultipleXMFLOAT4X4(&mat,scale,trans);

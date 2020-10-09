@@ -63,6 +63,13 @@ namespace Math {
 			const XMFLOAT4X4& m2
 		);
 
+		/**
+		* @brief 行列を全て0にする
+		*/
+		void ClearXMFLOAT4X4(
+			XMFLOAT4X4* out
+		);
+
 
 		/**
 		* @brief 掛け合わせ行列
@@ -71,6 +78,23 @@ namespace Math {
 		XMFLOAT4X4*out,
 			XMFLOAT4X4&mat1,
 			XMFLOAT4X4&mat2
+		);
+
+		/**
+		* @brief 調整中の掛け合わせ行列
+		*/
+		void TestMultipleXMFLOAT4X4(
+			XMFLOAT4X4* out,
+			XMFLOAT4X4& mat1,
+			XMFLOAT4X4& mat2
+		);
+
+		/**
+		* @brief 掃き出し法を用いた逆行列変換
+		*/
+		void InverseMatrixSweepingMethod(
+			XMFLOAT4X4* out,
+			XMFLOAT4X4&in
 		);
 
 
@@ -111,16 +135,16 @@ namespace Math {
 		*/
 		void TSMatrixTranslation(
 			XMFLOAT4X4* out_mat,
-			XMFLOAT3& trans
+			const XMFLOAT3& trans
 		);
 
 
 		/**
 		* @brief 拡縮変換行列
 		*/
-		void TSMatrixScailing(
+		void TSMatrixScale(
 			XMFLOAT4X4* out_mat,
-			XMFLOAT3& mat
+			const XMFLOAT3& mat
 		);
 
 
@@ -171,6 +195,27 @@ namespace Math {
 			const float& degrees
 		);
 
+
+		/**
+		* @brief スケール回転移動行列計算
+		*/
+		void TsSRTRotationZYXMatrix(
+			XMFLOAT4X4* out_mat,
+			const XMFLOAT3& pos,
+			const XMFLOAT3& rotation,
+			const XMFLOAT3& scale
+		);
+
+
+		/**
+		* @brief カメラ座標の逆行列
+		*/
+		void TSInverseViewMatrix(
+			XMFLOAT4X4* out,
+			XMFLOAT4X4& in
+		);
+
+
 		/**
 		* @brief ビュー変換行列
 		*/
@@ -179,6 +224,28 @@ namespace Math {
 			XMFLOAT3& pos,
 			XMFLOAT3& look,
 			XMFLOAT3& up_dir_vec
+		);
+
+
+		/**
+		* @brief プロジェクション変換行列
+		*/
+		void TSProjectionMatrix(
+			XMFLOAT4X4* out,
+			float angle,
+			float aspact,
+			float _far,
+			float _near
+		);
+
+
+		/**
+		* @brief スクリーン変換行列
+		*/
+		void TSScreenMatrix(
+			XMFLOAT4X4* out,
+			float width,
+			float height
 		);
 	}
 
