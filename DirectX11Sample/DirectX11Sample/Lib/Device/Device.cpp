@@ -8,7 +8,7 @@ bool Device::Init(
 ) {
 
 	// ウィンドウモード代入
-	m_is_window_mode =
+	m_is_window_mode = 
 		is_window_mode;
 
 	// DeviceとSwapChainの作成
@@ -19,7 +19,7 @@ bool Device::Init(
 	}
 
 	// RenderTargetViewの作成
-	if (CreateRenderTargetView() == false) {
+	if (CreateRenderTargetView() == false){
 		return false;
 	}
 
@@ -50,10 +50,10 @@ void Device::Release() {
 	   参照カウンタを減算
 	*/
 
-	if (mp_context != nullptr)
+	if (mp_immediate_context != nullptr)
 	{
-		mp_context.Get()->ClearState();
-		mp_context.Get()->Release();
+		mp_immediate_context->ClearState();
+		mp_immediate_context->Release();
 	}
 
 	if (mp_swap_chain != nullptr)
@@ -65,23 +65,35 @@ void Device::Release() {
 	{
 		mp_device->Release();
 	}
+
+	if (mp_render_target_view != nullptr) {
+		mp_render_target_view->Release();
+	}
+
+	if (mp_depth_stencil_view != nullptr) {
+		mp_depth_stencil_view->Release();
+	}
+
+	if (mp_depth_stencil_texture != nullptr) {
+		mp_depth_stencil_texture->Release();
+	}
 }
 
 
 void Device::StartRendering() {
 
 	float clear_color[4] = 
-	{ 0.f,0.f,0.f,1.f };
+	{ 0.f,0.f,1.f,1.f };
 
 	// RenderTargetViewのクリア
-	mp_context->ClearRenderTargetView(
-		mp_render_target_view.Get(),
+	mp_immediate_context->ClearRenderTargetView(
+		mp_render_target_view,
 		clear_color
 	);
 
 	// DepthViewとStencilViewのクリア
-	mp_context->ClearDepthStencilView(
-		mp_depth_stencil_view.Get(),
+	mp_immediate_context->ClearDepthStencilView(
+		mp_depth_stencil_view,
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
 		1.f,
 		0
@@ -143,7 +155,7 @@ const std::string&window_class_name
 		// 成功したD3D_FEATURE_LEVELの出力先
 		&level,
 		// 関数成功時のContextの出力先
-		&mp_context
+		&mp_immediate_context
 	);
 
 	if (hr != S_OK) {
@@ -364,7 +376,7 @@ bool Device::CreateDepthAndStencilView(
 	// CreateTexture2Dとdsv_descからDepthとStencilバッファを作る
 	hr = mp_device->CreateDepthStencilView(
 		// DSVとして使用されるTexture
-		mp_depth_stencil_texture.Get(),
+		mp_depth_stencil_texture,
 		// DSVの設定
 		&dsv_desc,
 		// D3D11DepthStencilViewの出力先
@@ -383,7 +395,7 @@ bool Device::SetUpViewPort(
 	const std::string& window_class_name
 ) {
 
-	HWND w_handle =
+	HWND w_handle = 
 		FindWindowA(window_class_name.c_str(), nullptr);
 
 	if (w_handle == nullptr) {
@@ -394,22 +406,71 @@ bool Device::SetUpViewPort(
 
 	GetClientRect(w_handle, &rect);
 
+	float w = static_cast<float>(
+		(rect.right - rect.left));
+	float h = static_cast<float>(
+		(rect.bottom - rect.top));
+
 	//ビューポートの設定
 	D3D11_VIEWPORT view_port;
 	view_port.TopLeftX = 0;							   // 左上X座標
 	view_port.TopLeftY = 0;							   // 左上Y座標
-	view_port.Width = 
-		static_cast<float>(
-		(rect.right - rect.left));                     // 横幅
-	view_port.Height = 
-		static_cast<float>(
-		(rect.bottom - rect.top));                     // 縦幅
+	view_port.Width = w;                // 横幅
+	view_port.Height = h;
+	                   // 縦幅
 	view_port.MinDepth = 0.0f;						   // 最小深度
 	view_port.MaxDepth = 1.0f;						   // 最大深度
 
-	mp_context->RSSetViewports(
+	mp_immediate_context->RSSetViewports(
 		1,					// 設定するビューポートの数
 		&view_port);		// 設定するビューポート情報のポインタ
 
 	return true;
+}
+
+
+void Device::SetViewPort(const D3D11_VIEWPORT& port) {
+
+	mp_immediate_context->RSSetViewports(
+		1,					// 設定するビューポートの数
+		&port);		// 設定するビューポート情報のポインタ
+
+	return;
+}
+
+
+bool Device::CreateDeferredContext() {
+
+	ComPtr<ID3D11DeviceContext> p_def;
+
+	mp_device->CreateDeferredContext(0,&p_def);
+
+	p_def->Release();
+
+	return true;
+}
+
+
+ID3D11DeviceContext *Device::GetPtrImmContext(){
+	return mp_immediate_context;
+}
+
+
+ID3D11Device *Device::GetPtrDevice(){
+	return mp_device;
+}
+
+
+IDXGISwapChain *Device::GetPtrSwapChain(){
+	return mp_swap_chain;
+}
+
+
+ID3D11DepthStencilView *Device::GetPtrDepthStencilView() {
+	return mp_depth_stencil_view;
+}
+
+
+ID3D11RenderTargetView *Device::GetPtrRenderTargetView() {
+	return mp_render_target_view;
 }

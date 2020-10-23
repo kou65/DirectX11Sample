@@ -13,7 +13,7 @@ using namespace DirectX;
 namespace Math {
 
 
-	const float PI = 3.14159265359;
+	const float PI = 3.141592653589793238462643383279f;
 
 	/**
 	* @brief ラジアン(1.f ~ 0.f)変換
@@ -32,7 +32,10 @@ namespace Math {
 
 
 
-	float GetLength(const XMFLOAT3& dir);
+	float GetLength(const XMFLOAT3& point);
+
+
+	float GetLength(const XMFLOAT2& point);
 
 
 	XMFLOAT3 GetDirVec1(
@@ -42,6 +45,20 @@ namespace Math {
 
 	XMFLOAT3 CalcNormalize(const XMFLOAT3& vec1);
 
+
+	void Rotation2D(
+		float radian,
+		const float& cx,
+		const float& cy,
+		float &x,
+		float &y
+	);
+
+	void Rotation2D2(
+		float radian,
+		float& x,
+		float& y
+	);
 
 	namespace TS_XMFLOAT4X4 {
 
@@ -67,7 +84,7 @@ namespace Math {
 		* @brief 行列を全て0にする
 		*/
 		void ClearXMFLOAT4X4(
-			XMFLOAT4X4* out
+			XMFLOAT4X4*out
 		);
 
 
@@ -339,17 +356,14 @@ namespace Math {
 	}
 
 
-	namespace Math {
-
-		namespace Cross {
+	namespace Cross {
 
 
-			void CrossXMFLOAT3(
-				XMFLOAT3* out,
-				const XMFLOAT3& vec1,
-				const XMFLOAT3& vec2
-			);
-		}
+		void CrossXMFLOAT3(
+			XMFLOAT3* out,
+			const XMFLOAT3& vec1,
+			const XMFLOAT3& vec2
+		);
 	}
 }
 

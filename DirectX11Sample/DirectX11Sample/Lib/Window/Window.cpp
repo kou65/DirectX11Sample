@@ -101,13 +101,14 @@ void Window::ResizeWindow(HWND window_handle)
 	GetWindowRect(window_handle, &window_rect);
 	GetClientRect(window_handle, &client_rect);
 
+	// フレームサイズ
 	int frame_size_x = (window_rect.right - window_rect.left) - (client_rect.right - client_rect.left);
 	int frame_size_y = (window_rect.bottom - window_rect.top) - (client_rect.bottom - client_rect.top);
 
 	SetWindowPos(window_handle, 
 		NULL, CW_USEDEFAULT, 0, 
-		frame_size_x + m_width_size,
-		frame_size_y + m_height_size,
+		m_width_size,
+		m_height_size,
 		SWP_NOMOVE);
 
 	ShowWindow(window_handle, SW_SHOW);

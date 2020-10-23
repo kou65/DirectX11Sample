@@ -3,14 +3,14 @@
 
 VertexShader::VertexShader() {
 
-	mp_interface = nullptr;
+	mp_vs = nullptr;
 }
 
 
 VertexShader::~VertexShader() {
 
-	if (mp_interface != nullptr) {
-		mp_interface->Release();
+	if (mp_vs != nullptr) {
+		mp_vs->Release();
 	}
 }
 
@@ -19,6 +19,10 @@ bool VertexShader::Create(
 	ID3D11Device* p_device,
 	const std::string& file_name
 ) {
+
+	if (p_device == nullptr) {
+		return false;
+	}
 
 	// シェーダー作成
 	if (ShaderBase::Create(p_device, file_name) == false) {
@@ -33,7 +37,7 @@ bool VertexShader::Create(
 			mp_data,
 			m_size,
 			nullptr,
-			&mp_interface
+			&mp_vs
 		);
 
 	if (hr != S_OK) {
@@ -44,6 +48,6 @@ bool VertexShader::Create(
 }
 
 
-ComPtr<ID3D11VertexShader>VertexShader::GetInterfacePtr() {
-	return mp_interface;
+ID3D11VertexShader *VertexShader::GetInterfacePtr() {
+	return mp_vs;
 }

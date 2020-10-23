@@ -3,14 +3,14 @@
 
 PixelShader::PixelShader() {
 
-	mp_interface = nullptr;
+	mp_ps = nullptr;
 }
 
 
 PixelShader::~PixelShader() {
 
-	if (mp_interface != nullptr) {
-		mp_interface->Release();
+	if (mp_ps != nullptr) {
+		mp_ps->Release();
 	}
 }
 
@@ -30,7 +30,7 @@ bool PixelShader::Create(
 
 	// ピクセルシェーダー作成
 	hr = p_device->CreatePixelShader(
-			mp_data, m_size, nullptr, &mp_interface);
+			mp_data, m_size, nullptr, &mp_ps);
 
 	if (hr != S_OK)
 	{
@@ -41,7 +41,7 @@ bool PixelShader::Create(
 }
 
 
-ComPtr<ID3D11PixelShader> PixelShader::GetInterfacePtr() {
+ID3D11PixelShader* PixelShader::GetInterfacePtr() {
 
-	return mp_interface;
+	return mp_ps;
 }

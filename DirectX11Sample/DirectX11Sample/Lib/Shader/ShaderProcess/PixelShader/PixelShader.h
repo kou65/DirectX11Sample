@@ -32,11 +32,11 @@ public:
 	/**
 	* @brief インターフェースptrを返す
 	*/
-	ComPtr<ID3D11PixelShader>GetInterfacePtr();
+	ID3D11PixelShader *GetInterfacePtr();
 
 private:
 
-	ComPtr<ID3D11PixelShader>mp_interface;
+	ID3D11PixelShader *mp_ps;
 };
 
 #endif

@@ -3,10 +3,10 @@
 
 
 /**
-* @struct Sur2DCustomVertex
+* @struct CustomVertex2D
 * @brief サーフェイスのカスタムバーテックス
 */
-struct Sur2DCustomVertex {
+struct CustomVertex2D {
 	float pos[3];
 	float col[4];
 

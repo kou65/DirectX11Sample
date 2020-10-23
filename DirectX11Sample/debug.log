@@ -1,0 +1,4 @@
+[1014/193606.710:ERROR:settings.cc(430)] Settings version is not 5
+[1015/155542.883:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\蜑榊ｷ昴豢ｸ螟ｪ驛蚕AppData\Local\Microsoft\Edge\User Data\Crashpad\attachments\9ccd5bdf-5471-4c7a-87b3-eb4e1d47c254: 指定されたパスが見つかりません。 (0x3)
+[1015/155542.905:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\蜑榊ｷ昴豢ｸ螟ｪ驛蚕AppData\Local\Microsoft\Edge\User Data\Crashpad\attachments\ae6e9b15-61a5-427e-9f0f-626158dd32be: 指定されたパスが見つかりません。 (0x3)
+[1015/155542.906:ERROR:directory_reader_win.cc(43)] FindFirstFile: 指定されたパスが見つかりません。 (0x3)

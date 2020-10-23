@@ -1,6 +1,8 @@
 ﻿#include"Lib.h"
 #include"../Input/Key/Key.h"
 #include"../Input/GamePad/GamePad.h"
+#include"../LibSingletonManager/LibSingletonManager.h"
+#include"../PrimitiveRenderer/PrimitiveRenderer.h"
 
 
 
@@ -21,12 +23,19 @@ bool Lib::Init() {
 		return false;
 	}
 
-	// シングルトン作成
-	Singleton<Device>::CreateInstance();
+	// ライブライ用シングルトン管理者のインスタンス作成
+	LibSingletonManager::CreateInstance();
 
-	Singleton<Device>::GetInstance()->Init(
+	// ライブラリ用のシングルトンを作成
+	LibSingletonManager::GetInstance()->Create();
+
+	// デバイスの初期化
+	Device::GetInstance()->Init(
 		mp_window->GetWindowName()
 	);
+
+	// レンダラーの初期化
+	PrimitiveRenderer::GetInstance()->Init();
 
 	return true;
 }
@@ -46,8 +55,8 @@ bool Lib::Update() {
 void Lib::Release() {
 
 	// 解放
-	Singleton<Device>::GetInstance()->Release();
+	//Device::GetInstance()->Release();
 
-	// インスタンスを解放
-	Singleton<Device>::DestroyInstance();
+	// ライブラリ用のシングルトンを作成
+	//LibSingletonManager::GetInstance()->Destory();
 }

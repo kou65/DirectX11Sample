@@ -1,4 +1,13 @@
-float4 main() : SV_TARGET
+
+// PixelShaderに送られてくるデータ構造
+struct PS_IN
 {
-	return float4(1.0f, 1.0f, 1.0f, 1.0f);
+    float4 pos : SV_POSITION;
+    float4 col : COLOR;
+};
+
+float4 main(PS_IN input) : SV_TARGET
+{
+
+	return input.col;
 }

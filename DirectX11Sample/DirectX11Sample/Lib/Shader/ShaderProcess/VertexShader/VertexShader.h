@@ -37,12 +37,12 @@ public:
 	/**
 	* @brief インターフェース
 	*/
-	ComPtr<ID3D11VertexShader> GetInterfacePtr();
+	ID3D11VertexShader* GetInterfacePtr();
 
 private:
 
-	//! 頂点シェーダー
-	ComPtr<ID3D11VertexShader>mp_interface;
+	//! 頂点シェーダーバッファ
+	ID3D11VertexShader *mp_vs;
 };
 
 #endif

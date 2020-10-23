@@ -9,17 +9,51 @@
 #include<wrl.h>
 #include"../SingletonTemplate/SingletonTemplate.h"
 
-
 //! DirectX版のスマートポインタ
 using namespace Microsoft::WRL;
-
 
 /**
 * @class Device
 * @brief デバイス関係のクラス
 */
-class Device {
+class Device : public Singleton<Device>{
 public:
+
+	// シングルトンでのインスタンス作成は許可
+	// フレンドクラスでsingletonインスタンス継承
+	friend class Singleton<Device>;
+
+public:
+
+
+	/**
+	* @brief ImmediateContextのptrを返す
+	*/
+	ID3D11DeviceContext *GetPtrImmContext();
+
+
+	/**
+	* @brief デバイスのptrを返す
+	*/
+	ID3D11Device *GetPtrDevice();
+
+
+	/**
+	* @brief スワップチェインを返す
+	*/
+	IDXGISwapChain *GetPtrSwapChain();
+
+
+	/**
+	* @brief 深度ステンシルビューのptrを返す
+	*/
+	ID3D11DepthStencilView *GetPtrDepthStencilView();
+
+
+	/**
+	* @brief レンダーターゲットビュー
+	*/
+	ID3D11RenderTargetView *GetPtrRenderTargetView();
 
 
 	/**
@@ -49,7 +83,19 @@ public:
 	*/
 	void EndRendering();
 
+
+	/**
+	* @brief ビューポート設定
+	*/
+	void SetViewPort(const D3D11_VIEWPORT& port);
+
+
 private:
+
+
+	Device(){
+		m_is_window_mode = false;
+	};
 
 
 	/**
@@ -86,15 +132,21 @@ private:
 
 
 	/**
-	* @brief ビューポートの設定
+	* @brief ビューポートセットアップ
 	*/
 	bool SetUpViewPort(
 		const std::string& window_class_name
 	);
 
+
+	/**
+	* @brief マルチスレッドデバイスの作成(Deferred)
+	*/
+	bool CreateDeferredContext();
+
 private:
 
-	ComPtr<ID3D11Device>mp_device;
+	ID3D11Device *mp_device;
 
 	/**
 	* @brief DeviceContextのInterface@n
@@ -106,19 +158,19 @@ private:
 	* 　このContextで実行した描画命令はコマンドリストへ追加され、@n
 	* 　コマンドリスト実行命令を使うことで開始される@n
 	*/
-	ComPtr<ID3D11DeviceContext>mp_context;
+	ID3D11DeviceContext *mp_immediate_context;
 
 	//! SwapChainのInterface
-	ComPtr<IDXGISwapChain>mp_swap_chain;
+	IDXGISwapChain *mp_swap_chain;
 
 	//! RenderTargetViewのInterface
-	ComPtr<ID3D11RenderTargetView>mp_render_target_view;
+	ID3D11RenderTargetView *mp_render_target_view;
 
 	//! ID3D11DepthStencilViewを生成するためのテクスチャ
-	ComPtr<ID3D11Texture2D>mp_depth_stencil_texture;
+	ID3D11Texture2D *mp_depth_stencil_texture;
 
 	//! DepthStencilViewのInterface
-	ComPtr<ID3D11DepthStencilView>mp_depth_stencil_view;
+	ID3D11DepthStencilView *mp_depth_stencil_view;
 
 	//! ウィンドウモード
 	bool m_is_window_mode;

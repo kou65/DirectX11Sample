@@ -9,22 +9,64 @@ namespace Math {
 	float DegreesToRad(
 		float degree
 	) {
-		return (degree * PI / 180.f);
+		return (degree * (PI / 180.f));
 	}
 
 
 	float RadToDegrees(
 		float radian
 	) {
-		return (radian * 180.f / PI);
+		return (radian * (180.f / PI));
 	}
 
 
-	float GetLength(const XMFLOAT3& dir) {
+	float GetLength(const XMFLOAT3& p) {
 
 		// 三平方の定理で距離を出す
 		// 平方根化
-		return(sqrtf((dir.x * dir.x) + (dir.y * dir.y) + (dir.z * dir.z)));
+		return(sqrtf((p.x * p.x) + (p.y * p.y) + (p.z * p.z)));
+	}
+
+
+	float GetLength(const XMFLOAT2& p) {
+
+		return sqrtf((p.x * p.x) + (p.y * p.y));
+	}
+
+
+	void Rotation2D(
+		float radian,
+		const float& cx,
+		const float& cy,
+		float& x,
+		float& y
+	) {
+
+
+		XMFLOAT2 p;
+		p.x = cx;
+		p.y = cy;
+
+		// 距離を測る
+		float len = GetLength(p);
+
+		float cos = cosf(radian);
+		float sin = sinf(radian);
+
+		// 回転公式
+		x = (cos * cx) - (sin * cy);
+		y = (sin * cx) + (cos * cy);
+	}
+
+
+	void Rotation2D2(
+		float radian,
+		float& x,
+		float& y
+	) {
+
+		x = x * cosf(radian);
+		y = y * sinf(radian);
 	}
 
 
@@ -102,15 +144,15 @@ namespace Math {
 
 
 		void InverseMatrixSweepingMethod(
-			XMFLOAT4X4*inv_a,
-			XMFLOAT4X4&a
+			XMFLOAT4X4* inv_a,
+			XMFLOAT4X4& a
 		) {
-
+			/*
 			// 行列の基本変形
 			// 一つの行列を何倍かする(0倍は含まない)
 			// 二つの行列を入れ替える
 			// 一つの行に他の行の何倍かを加える
-			
+
 			// 右に単位行列を設置し、
 			// 左にある行列を単位行列にする
 			// A I → I X
@@ -144,7 +186,7 @@ namespace Math {
 						}
 					}
 				}
-			}
+			}*/
 		}
 
 
@@ -334,7 +376,7 @@ namespace Math {
 
 		void TSMatrixRotationX(
 			XMFLOAT4X4* out_mat,
-			float& radian
+			const float& radian
 		) {
 
 			// x軸 ピッチ
@@ -350,7 +392,7 @@ namespace Math {
 
 		void TSMatrixRotationY(
 			XMFLOAT4X4* out_mat,
-			float& radian
+			const float& radian
 		) {
 
 			// ヨー
@@ -366,7 +408,7 @@ namespace Math {
 
 		void TSMatrixRotationZ(
 			XMFLOAT4X4* out_mat,
-			float& radian
+			const float& radian
 		) {
 
 			// z軸 ロール
@@ -382,7 +424,7 @@ namespace Math {
 
 		void TSMatrixRotationXDegrees(
 			XMFLOAT4X4* out_mat,
-			float& degrees
+			const float& degrees
 		) {
 			TSMatrixRotationX(
 				out_mat,
@@ -392,7 +434,7 @@ namespace Math {
 
 		void TSMatrixRotationYDegrees(
 			XMFLOAT4X4* out_mat,
-			float& degrees
+			const float& degrees
 		) {
 			TSMatrixRotationY(
 				out_mat,
@@ -400,9 +442,10 @@ namespace Math {
 			);
 		}
 
+
 		void TSMatrixRotationZDegrees(
 			XMFLOAT4X4* out_mat,
-			float& degrees
+			const float& degrees
 		) {
 			
 
@@ -476,7 +519,7 @@ namespace Math {
 
 			// x軸
 			// 外積の結果は直行しているベクトルになる
-			Cross::CrossXMFLOAT3(
+			Math::Cross::CrossXMFLOAT3(
 				&x_axis,
 				up_dir_vec,
 				z_axis
@@ -492,7 +535,7 @@ namespace Math {
 			// 上方向ベクトルは直行しているかどうか不明
 			// xyz軸を垂直に交わらせる必要がある
 
-			Cross::CrossXMFLOAT3(
+			Math::Cross::CrossXMFLOAT3(
 				&y_axis,
 				z_axis,
 				x_axis
@@ -519,7 +562,7 @@ namespace Math {
 			// カメラの座標軸とカメラ座標の内積を行う
 			//  = 移動値が出せる
 			// cosからその方向の移動値が出せる
-			XMFLOAT3 vec;
+			//XMFLOAT3 vec;
 
 			float p_x = 0.f,p_y = 0.f,p_z = 0.f;
 

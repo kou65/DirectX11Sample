@@ -34,6 +34,17 @@ public:
 		const std::string&file_name
 	);
 
+
+	inline const char* GetData()
+	{
+		return mp_data;
+	}
+
+	inline long GetSize()
+	{
+		return m_size;
+	}
+
 protected:
 
 
@@ -49,12 +60,14 @@ protected:
 protected:
 
 	/**
-	* @brief 型の共用体
+	* @brief 型の共用体 どちらかの型を使える
 	*/
 	union Interface
 	{
-		ComPtr<ID3D11VertexShader>p_vs;
-		ComPtr<ID3D11PixelShader>p_ps;
+		~Interface() {};
+
+		ID3D11VertexShader *p_vs;
+		ID3D11PixelShader *p_ps;
 	};
 
 	//! ファイルデータ

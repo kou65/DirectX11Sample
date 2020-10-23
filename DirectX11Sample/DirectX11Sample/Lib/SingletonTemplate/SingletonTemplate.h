@@ -4,6 +4,7 @@
 
 
 
+// ここに使用クラスが入る
 template<class T>
 
 class Singleton {
@@ -40,18 +41,21 @@ public:
 
 protected:
 
+	// 隠しコンストラクタ
 	Singleton() {}
 
 	~Singleton() {}
 
 private:
 
+	// 実際にfriendにして開示しないと使用できない
 	static T* ptr_instance;
 };
 
 
 template <class T>
 
+// nullptrで初期化しておく
 T* Singleton<T>::ptr_instance = nullptr;
 
 #endif

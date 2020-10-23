@@ -5,6 +5,11 @@
 #include"../Input/Mouse/Mouse.h"
 #include"../Input/Key/Key.h"
 #include"../Math/Math.h"
+#include"../Device/Device.h"
+#include"../PrimitiveRenderer/PrimitiveRenderer.h"
+#include"../Polygon/Surface2D/Surface2D.h"
+#include"../Polygon/Triangle/Triangle.h"
+
 
 
 
@@ -19,10 +24,48 @@ int WINAPI WinMain(
 
 	lib.Init();
 
+
+	Surface2D s;
+
+	s.Create(
+		Device::GetInstance(),
+		PrimitiveRenderer::GetInstance()->
+		GetPtrVertexShader()
+	);
+
+
+	Triangle t;
+	t.Create(
+		Device::GetInstance()->GetPtrDevice(),
+		PrimitiveRenderer::GetInstance()->GetPtrVertexShader()
+	);
+
 	while(WindowsSystem::ProcessMessage() == true) {
+
+		if (Key::GetInterface().Push(VK_ESCAPE) == true) {
+			break;
+		}
 
 		// 更新
 		lib.Update();
+
+		float px = 10.f, py = 10.f, r = 0.f,out_x = 0.f,out_y = 0.f;
+
+		Math::Rotation2D(
+			Math::DegreesToRad(r), 
+			px,     // ここから回す位置(原点ではない)
+			py,     // ここから回す位置
+			out_x,	// 参照値
+			out_y	// 参照値
+		);
+
+
+		Math::Rotation2D2(
+			Math::DegreesToRad(r),
+			px,
+			py
+		);
+
 
 		XMFLOAT4X4 mat,trans,scale;
 		Math::TS_XMFLOAT4X4::IdentityMatrix(&mat);
@@ -47,11 +90,19 @@ int WINAPI WinMain(
 
 
 		// 描画開始
-		Singleton<Device>::GetInstance()->StartRendering();
+		Device::GetInstance()->StartRendering();
 
+
+		//PrimitiveRenderer::GetInstance()->
+		//	RenderingPolygonDev(&t);
+
+		PrimitiveRenderer::
+			GetInstance()->RenderingMeshDev(
+			&s
+		);
 
 		// 描画終了
-		Singleton<Device>::GetInstance()->EndRendering();
+		Device::GetInstance()->EndRendering();
 	}
 
 	lib.Release();
