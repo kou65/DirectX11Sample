@@ -2,14 +2,14 @@
 #define SURFACE2D_CUSTOM_VERTEX_H_
 
 
+
 /**
-* @struct CustomVertex2D
+* @struct CustomVertexPosColor
 * @brief サーフェイスのカスタムバーテックス
 */
-struct CustomVertex2D {
+struct CustomVertexPosColor {
 	float pos[3];
 	float col[4];
-
 };
 
 #endif

@@ -14,6 +14,14 @@ ShaderBase::ShaderBase() {
 }
 
 
+ShaderBase::~ShaderBase() {
+
+	delete[] mp_data;
+
+	m_const_buffer.Release();
+};
+
+
 bool ShaderBase::Create(
 	ID3D11Device* p_device,
 	const std::string& file_name
@@ -63,3 +71,10 @@ int ShaderBase::LoadFile(
 
 	return m_size;
 }
+
+
+
+Buffer *ShaderBase::GetConstBuffer() {
+	return &m_const_buffer;
+}
+

@@ -2,7 +2,7 @@
 #include"../Window/Window.h"
 
 
-bool Device::Init(
+bool Device::Create(
 	const std::string& window_class_name,
 	bool is_window_mode
 ) {
@@ -43,7 +43,7 @@ bool Device::Init(
 }
 
 
-void Device::Release() {
+void Device::Destroy() {
 
 	/* 
 	   Release関数を呼びAddRefされて加算されていた
@@ -83,7 +83,7 @@ void Device::Release() {
 void Device::StartRendering() {
 
 	float clear_color[4] = 
-	{ 0.f,0.f,1.f,1.f };
+	{ 0.f,0.f,0.f,0.f };
 
 	// RenderTargetViewのクリア
 	mp_immediate_context->ClearRenderTargetView(
@@ -226,7 +226,7 @@ bool Device::CreateRenderTargetView() {
 	このViewの内容をゲーム画面に反映させる
 	*/
 
-	ComPtr<ID3D11Texture2D>back_buffer;
+	ID3D11Texture2D *back_buffer;
 
 	HRESULT hr;
 
@@ -245,7 +245,7 @@ bool Device::CreateRenderTargetView() {
 	// BufferからRenderTargetViewの作成
 	hr =
 	mp_device->CreateRenderTargetView(
-		back_buffer.Get(),
+		back_buffer,
 		NULL,
 		&mp_render_target_view
 	);

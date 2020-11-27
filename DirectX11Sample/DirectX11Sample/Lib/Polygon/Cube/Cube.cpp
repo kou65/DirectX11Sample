@@ -1,9 +1,20 @@
 ﻿#include"Cube.h"
 #include"../../CustomVertex/CustomVertex2D.h"
+#include"../../CustomVertex/CustomVertexPosNorCol.h"
+#include"../../CustomVertex/CustomVertex2D.h"
+#include"../../TransformMatrixData3D/TransformMatrixData3D.h"
+#include"../../Shader/VertexShaderManager/VertexShaderManager.h"
 
 
 
-void Cube::IndexListSet(WORD list[36]) {
+Cube::Cube() : MeshPrimitive(
+sizeof(CustomVertexPosNorCol),VERTEX_COUNT,0,INDEX_COUNT 
+){
+
+}
+
+
+void Cube::InitIndexList(WORD list[36]) {
 
 	list[0] = 0;
 	list[1] = 1;
@@ -46,40 +57,39 @@ void Cube::IndexListSet(WORD list[36]) {
 	list[33] = 23;
 	list[34] = 22;
 	list[35] = 21;
-
 }
 
 
-CustomVertex2D g_VertexList[]{
-	{ { -0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-	{ {  0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-	{ { -0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-	{ {  0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+CustomVertexPosNorCol g_VertexList[]{
+	{ { -0.5f,  0.5f, -0.5f }, {1.f,1.f,1.f},{ 1.0f, 0.0f, 0.0f, 1.0f } },
+	{ {  0.5f,  0.5f, -0.5f }, {1.f,1.f,1.f},{ 1.0f, 0.0f, 0.0f, 1.0f } },
+	{ { -0.5f, -0.5f, -0.5f }, {1.f,1.f,1.f},{ 1.0f, 0.0f, 0.0f, 1.0f } },
+	{ {  0.5f, -0.5f, -0.5f }, {1.f,1.f,1.f},{ 1.0f, 0.0f, 0.0f, 1.0f } },
+							   
+	{ { -0.5f,  0.5f,  0.5f }, {1.f,1.f,1.f},{ 0.0f, 1.0f, 1.0f, 1.0f } },
+	{ { -0.5f, -0.5f,  0.5f }, {1.f,1.f,1.f},{ 0.0f, 1.0f, 1.0f, 1.0f } },
+	{ {  0.5f,  0.5f,  0.5f }, {1.f,1.f,1.f},{ 0.0f, 1.0f, 1.0f, 1.0f } },
+	{ {  0.5f, -0.5f,  0.5f }, {1.f,1.f,1.f},{ 0.0f, 1.0f, 1.0f, 1.0f } },
+							   
+	{ { -0.5f,  0.5f,  0.5f }, {1.f,1.f,1.f},{ 1.0f, 1.0f, 0.0f, 1.0f } },
+	{ { -0.5f,  0.5f, -0.5f }, {1.f,1.f,1.f},{ 1.0f, 1.0f, 0.0f, 1.0f } },
+	{ { -0.5f, -0.5f,  0.5f }, {1.f,1.f,1.f},{ 1.0f, 1.0f, 0.0f, 1.0f } },
+	{ { -0.5f, -0.5f, -0.5f }, {1.f,1.f,1.f},{ 1.0f, 1.0f, 0.0f, 1.0f } },
 
-	{ { -0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
-	{ { -0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
-	{ {  0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
-	{ {  0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
+	{ {  0.5f,  0.5f,  0.5f }, {1.f,1.f,1.f},{ 0.0f, 0.0f, 1.0f, 1.0f } },
+	{ {  0.5f, -0.5f,  0.5f }, {1.f,1.f,1.f},{ 0.0f, 0.0f, 1.0f, 1.0f } },
+	{ {  0.5f,  0.5f, -0.5f }, {1.f,1.f,1.f},{ 0.0f, 0.0f, 1.0f, 1.0f } },
+	{ {  0.5f, -0.5f, -0.5f }, {1.f,1.f,1.f},{ 0.0f, 0.0f, 1.0f, 1.0f } },
 
-	{ { -0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
-	{ { -0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
-	{ { -0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
-	{ { -0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
+	{ { -0.5f,  0.5f,  0.5f }, {1.f,1.f,1.f},{ 1.0f, 0.0f, 1.0f, 1.0f } },
+	{ {  0.5f,  0.5f,  0.5f }, {1.f,1.f,1.f},{ 1.0f, 0.0f, 1.0f, 1.0f } },
+	{ { -0.5f,  0.5f, -0.5f }, {1.f,1.f,1.f},{ 1.0f, 0.0f, 1.0f, 1.0f } },
+	{ {  0.5f,  0.5f, -0.5f }, {1.f,1.f,1.f},{ 1.0f, 0.0f, 1.0f, 1.0f } },
 
-	{ {  0.5f,  0.5f,  0.5f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
-	{ {  0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
-	{ {  0.5f,  0.5f, -0.5f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
-	{ {  0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
-
-	{ { -0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f, 1.0f, 1.0f } },
-	{ {  0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f, 1.0f, 1.0f } },
-	{ { -0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f, 1.0f, 1.0f } },
-	{ {  0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f, 1.0f, 1.0f } },
-
-	{ { -0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-	{ { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-	{ {  0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-	{ {  0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+	{ { -0.5f, -0.5f,  0.5f }, {1.f,1.f,1.f},{ 0.0f, 1.0f, 0.0f, 1.0f } },
+	{ { -0.5f, -0.5f, -0.5f }, {1.f,1.f,1.f},{ 0.0f, 1.0f, 0.0f, 1.0f } },
+	{ {  0.5f, -0.5f,  0.5f }, {1.f,1.f,1.f},{ 0.0f, 1.0f, 0.0f, 1.0f } },
+	{ {  0.5f, -0.5f, -0.5f }, {1.f,1.f,1.f},{ 0.0f, 1.0f, 0.0f, 1.0f } },
 };
 
 bool Cube::Create(
@@ -87,36 +97,37 @@ bool Cube::Create(
 	VertexShader* vs
 ) {
 
-
 	if (dev == nullptr) {
 		return false;
 	}
 
-
 	// バーテックスバッファ
-	m_vb.Init(
+	m_vertex_buffer.Init(
 		dev,
-		(sizeof(CustomVertex2D) * 24),
-		g_VertexList
+		(sizeof(CustomVertexPosNorCol) * VERTEX_COUNT),
+		g_VertexList,
+		D3D11_BIND_FLAG::D3D11_BIND_VERTEX_BUFFER
 	);
 
 	WORD list[36];
 
-	// インデックスリスト
-	IndexListSet(list);
+	// インデックスリストセット
+	InitIndexList(list);
 
-	UINT size = (sizeof(WORD) * 36);
+	UINT size = (sizeof(WORD) * INDEX_COUNT);
 
 	// インデックスバッファ
-	m_ib.Init(
+	m_index_buffer.Init(
 		dev,
 		size,
-		list
+		list,
+		D3D11_BIND_FLAG::D3D11_BIND_INDEX_BUFFER
 	);
 
 	D3D11_INPUT_ELEMENT_DESC g_VertexDesc[]{
 	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,    0,                            0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	{ "NORMAL",0,DXGI_FORMAT_R32G32B32_FLOAT,4*3,0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, ((3*3)), D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 
 	// インプットレイアウト作成
@@ -132,5 +143,92 @@ bool Cube::Create(
 		return false;
 	}
 
+
+	// 定数バッファを使えるようにする
+	vs->GetConstBuffer()->Init(
+		dev,
+		sizeof(TransformMatrixData3D),
+		D3D11_BIND_CONSTANT_BUFFER
+	);
+
+	float width = 1920;
+	float height = 1080;
+
+	SetUpConstBuffer(
+		width,
+		height,
+		vs
+	);
+
 	return true;
+}
+
+
+void Cube::SetUpConstBuffer(
+	float aspect_width,
+	float aspect_height,
+	VertexShader*p_vs
+) {
+
+	// ワールド行列
+	XMMATRIX world_matrix = 
+		XMMatrixTranslation(
+			0.f,
+			0.f,
+			0.f
+		);
+
+	// ビューの位置座標
+	XMVECTOR eye = 
+		XMVectorSet(10.f, 2.f, -2.f, 0.f);
+
+	// 注視点
+	XMVECTOR focus = 
+		XMVectorSet(0.f, 0.f, 0.f, 0.f);
+
+	// 上方向
+	XMVECTOR up = 
+		XMVectorSet(0.f, 1.f, 0.f, 0.f);
+
+	// ビュー行列
+	XMMATRIX view_matrix = 
+		XMMatrixLookAtLH(eye, focus, up);
+
+	// プロジェクションの角度
+	constexpr float fov_angle = 
+		XMConvertToRadians(45.f);
+
+	// アスペクト比
+	float aspect = 
+		aspect_width / aspect_height;
+
+	// 描画クリッピング距離
+	float near_z = 0.1f;
+	float far_z = 100.f;
+
+	XMMATRIX proj_matrix =
+		XMMatrixPerspectiveFovLH(
+			fov_angle, 
+			aspect,
+			near_z,
+			far_z
+		);
+
+	TransformMatrixData3D data;
+
+	XMStoreFloat4x4(&data.world, XMMatrixTranspose(world_matrix));
+	XMStoreFloat4x4(&data.view, XMMatrixTranspose(view_matrix));
+	XMStoreFloat4x4(&data.projection, XMMatrixTranspose(proj_matrix));
+
+	// リソースデータを受け取る
+	Device::GetInstance()->GetPtrImmContext()->
+		UpdateSubresource(
+		p_vs->GetConstBuffer()->GetBuffer(),
+		0,
+		NULL,
+		&data,
+		0,
+		0
+	);
+
 }

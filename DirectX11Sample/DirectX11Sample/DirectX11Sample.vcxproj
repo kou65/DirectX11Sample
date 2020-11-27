@@ -148,11 +148,23 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="Lib\Device\Device.h">
+    <ClInclude Include="Lib\Buffer\Buffer.h">
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="Lib\IndexBuffer\IndexBuffer.h">
+    <ClInclude Include="Lib\Camera3D\Camera3D.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Lib\CreateShader\CreateShader.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Lib\CustomVertex\CustomVertexPosNorCol.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Lib\Device\Device.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -198,6 +210,18 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Lib\Shader\ConstantShader\ConstantShader.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Lib\Shader\Factory\PixelShaderFactory\PixelShaderFactory.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Lib\Shader\Factory\PSFactoryBase\PSFactoryBase.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Lib\Shader\PixelShaderManager\PixelShaderManager.h">
       <SubType>
       </SubType>
@@ -218,11 +242,23 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Lib\Shader\ShaderProcess\VS3D\VS3D.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Lib\Shader\Factory\VertexShaderFactory\VertexShaderFactory.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Lib\Shader\VertexShaderManager\VertexShaderManager.h">
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="Lib\VertexBuffer\VertexBuffer.h">
+    <ClInclude Include="Lib\Shader\Factory\VSFactoryBase\VSFactoryBase.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Lib\TransformMatrixData3D\TransformMatrixData3D.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -248,11 +284,15 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="Lib\Device\Device.cpp">
+    <ClCompile Include="Lib\Buffer\Buffer.cpp">
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="Lib\IndexBuffer\IndexBuffer.cpp">
+    <ClCompile Include="Lib\CreateShader\CreateShader.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Lib\Device\Device.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -300,6 +340,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="Lib\Shader\Factory\PixelShaderFactory\PixelShaderFactory.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Lib\Shader\PixelShaderManager\PixelShaderManager.cpp">
       <SubType>
       </SubType>
@@ -320,11 +364,15 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="Lib\Shader\VertexShaderManager\VertexShaderManager.cpp">
+    <ClCompile Include="Lib\Shader\ShaderProcess\VS3D\VS3D.cpp">
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="Lib\VertexBuffer\VertexBuffer.cpp">
+    <ClCompile Include="Lib\Shader\Factory\VertexShaderFactory\VertexShaderFactory.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Lib\Shader\VertexShaderManager\VertexShaderManager.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -349,16 +397,22 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0_level_9_3</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0_level_9_3</ShaderModel>
     </FxCompile>
     <FxCompile Include="Lib\Shader\ShaderFile\VertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0_level_9_3</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0_level_9_3</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Lib\Shader\ShaderFile\VS3D.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

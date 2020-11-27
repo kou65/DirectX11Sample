@@ -20,7 +20,7 @@ public:
 
 
 	/**
-	* @brief デストラクタ
+	* @brief 仮想デストラクタ
 	*/
 	virtual ~VertexShader();
 
@@ -38,6 +38,7 @@ public:
 	* @brief インターフェース
 	*/
 	ID3D11VertexShader* GetInterfacePtr();
+
 
 private:
 

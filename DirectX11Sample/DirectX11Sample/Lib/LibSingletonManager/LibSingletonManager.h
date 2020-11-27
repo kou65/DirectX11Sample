@@ -25,7 +25,7 @@ public:
 	/**
 	* @brief íœ
 	*/
-	void Destory();
+	void Destroy();
 
 private:
 

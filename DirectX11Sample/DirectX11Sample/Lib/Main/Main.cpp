@@ -9,6 +9,9 @@
 #include"../PrimitiveRenderer/PrimitiveRenderer.h"
 #include"../Polygon/Surface2D/Surface2D.h"
 #include"../Polygon/Triangle/Triangle.h"
+#include"../Polygon/Cube/Cube.h"
+#include"../Shader/VertexShaderManager/VertexShaderManager.h"
+#include"../Shader/ConstantShader/ConstantShader.h"
 
 
 
@@ -29,15 +32,27 @@ int WINAPI WinMain(
 
 	s.Create(
 		Device::GetInstance(),
-		PrimitiveRenderer::GetInstance()->
-		GetPtrVertexShader()
+		VertexShaderManager::GetInstance()->GetPtr(
+		ConstantShader::VSType::NORMAL
+		)
 	);
 
 
 	Triangle t;
 	t.Create(
 		Device::GetInstance()->GetPtrDevice(),
-		PrimitiveRenderer::GetInstance()->GetPtrVertexShader()
+		VertexShaderManager::GetInstance()->GetPtr(
+			ConstantShader::VSType::NORMAL
+		)
+	);
+
+	Cube cube;
+
+	cube.Create(
+		Device::GetInstance()->GetPtrDevice(),
+		VertexShaderManager::GetInstance()->GetPtr(
+			ConstantShader::VSType::VS3D
+		)
 	);
 
 	while(WindowsSystem::ProcessMessage() == true) {
@@ -49,56 +64,67 @@ int WINAPI WinMain(
 		// 更新
 		lib.Update();
 
-		float px = 10.f, py = 10.f, r = 0.f,out_x = 0.f,out_y = 0.f;
+		{
+			float px = 10.f, py = 10.f, r = 0.f, out_x = 0.f, out_y = 0.f;
 
-		Math::Rotation2D(
-			Math::DegreesToRad(r), 
-			px,     // ここから回す位置(原点ではない)
-			py,     // ここから回す位置
-			out_x,	// 参照値
-			out_y	// 参照値
-		);
-
-
-		Math::Rotation2D2(
-			Math::DegreesToRad(r),
-			px,
-			py
-		);
+			Math::Rotation2D(
+				Math::DegreesToRad(r),
+				px,     // ここから回す位置(原点ではない)
+				py,     // ここから回す位置
+				out_x,	// 参照値
+				out_y	// 参照値
+			);
 
 
-		XMFLOAT4X4 mat,trans,scale;
-		Math::TS_XMFLOAT4X4::IdentityMatrix(&mat);
-		Math::TS_XMFLOAT4X4::IdentityMatrix(&trans);
-		Math::TS_XMFLOAT4X4::IdentityMatrix(&scale);
-
-		XMFLOAT3 vec;
-		vec.x = 200.f;
-		vec.y = 10.f;
-		vec.z = 256.f;
-
-		Math::TS_XMFLOAT4X4::TSMatrixTranslation(&trans,vec);
-
-		vec.x = 3.f;
-		vec.y = 3.f;
-		vec.z = 2.f;
-
-		Math::TS_XMFLOAT4X4::TSMatrixScale(&scale, vec);
+			Math::Rotation2D2(
+				Math::DegreesToRad(r),
+				px,
+				py
+			);
 
 
-		Math::TS_XMFLOAT4X4::MultipleXMFLOAT4X4(&mat,scale,trans);
+			XMFLOAT4X4 mat, trans, scale;
+			Math::TS_XMFLOAT4X4::IdentityMatrix(&mat);
+			Math::TS_XMFLOAT4X4::IdentityMatrix(&trans);
+			Math::TS_XMFLOAT4X4::IdentityMatrix(&scale);
 
+			XMFLOAT3 vec;
+			vec.x = 200.f;
+			vec.y = 10.f;
+			vec.z = 256.f;
+
+			Math::TS_XMFLOAT4X4::TSMatrixTranslation(&trans, vec);
+
+			vec.x = 3.f;
+			vec.y = 3.f;
+			vec.z = 2.f;
+
+			Math::TS_XMFLOAT4X4::TSMatrixScale(&scale, vec);
+
+
+			Math::TS_XMFLOAT4X4::MultipleXMFLOAT4X4(&mat, scale, trans);
+		}
 
 		// 描画開始
 		Device::GetInstance()->StartRendering();
 
-
+		
 		//PrimitiveRenderer::GetInstance()->
-		//	RenderingPolygonDev(&t);
+		//	RenderingPolygonByDeviceView(&t,
+		//		ConstantShader::VSType::NORMAL,
+		//		ConstantShader::PSType::NORMAL
+		//	);
 
-		PrimitiveRenderer::
-			GetInstance()->RenderingMeshDev(
-			&s
+		//PrimitiveRenderer::
+		//	GetInstance()->RenderingMeshByDeviceView(
+		//	&s
+		//);
+		
+
+		PrimitiveRenderer::GetInstance()->RenderingMeshByDeviceView(
+			&cube,
+			ConstantShader::VSType::VS3D,
+			ConstantShader::PSType::NORMAL
 		);
 
 		// 描画終了

@@ -2,7 +2,7 @@
 #define MESH_PRIMITIVE_H_
 
 #include"../PolygonPrimitive/PolygonPrimitive.h"
-#include"../../IndexBuffer/IndexBuffer.h"
+#include"../../Buffer/Buffer.h"
 
 /**
 * @class MeshPrimitive
@@ -11,14 +11,29 @@
 class MeshPrimitive : public PolygonPrimitive{
 public:
 
+
+	MeshPrimitive(
+		UINT costom_vertex_size,
+		UINT vertex_count,
+		UINT vertex_start,
+		UINT index_count,
+		D3D_PRIMITIVE_TOPOLOGY tepology =
+		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
+	);
+
+
 	UINT GetIndexCount();
 
-	IndexBuffer GetIndexBuffer();
+
+	Buffer *GetIndexBuffer();
+
 
 protected:
 
 	UINT m_index_count;
-	IndexBuffer m_ib;
+
+	// インデックスバッファ
+	Buffer m_index_buffer;
 };
 
 #endif

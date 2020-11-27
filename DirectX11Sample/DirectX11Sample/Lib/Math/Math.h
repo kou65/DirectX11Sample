@@ -5,7 +5,9 @@
 #include<math.h>
 #include<DirectXMath.h>
 
+
 using namespace DirectX;
+
 
 /**
 * @namespace Math

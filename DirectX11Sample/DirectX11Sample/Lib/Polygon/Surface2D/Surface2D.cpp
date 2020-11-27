@@ -2,21 +2,20 @@
 
 
 
-Surface2D::Surface2D() {
+Surface2D::Surface2D() : MeshPrimitive(
+	sizeof(CustomVertexPosColor),
+	VERTEX_COUNT,
+	0,
+	INDEX_COUNT
+){
 
-	// カスタムバーテックスサイズ
-	m_costom_vertex_size = sizeof(CustomVertex2D);
-	m_vertex_count = VERTEX_COUNT;
-	m_index_count = INDEX_COUNT;
-	m_vertex_start = 0;
-	m_tepology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 }
 
 
 // セマンティクスなど設定
 D3D11_INPUT_ELEMENT_DESC g_VertexDesc[]{
 	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,    0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 4 * 3, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 };
 
 
@@ -29,16 +28,17 @@ VertexShader* vs
 		return false;
 	}
 
-	CustomVertex2D cv[VERTEX_COUNT];
+	CustomVertexPosColor cv[VERTEX_COUNT];
 
 	// ポリゴン形成
 	CreatePolygon(cv);
 
 	// バーテックスバッファ
-	m_vb.Init(
+	m_vertex_buffer.Init(
 		dev->GetPtrDevice(),
-		(sizeof(CustomVertex2D) * VERTEX_COUNT),
-		cv
+		(sizeof(CustomVertexPosColor) * VERTEX_COUNT),
+		cv,
+		D3D11_BIND_FLAG::D3D11_BIND_VERTEX_BUFFER
 	);
 
 	WORD list[6];
@@ -49,10 +49,11 @@ VertexShader* vs
 	UINT size = (sizeof(WORD) * INDEX_COUNT);
 
 	// インデックスバッファ
-	m_ib.Init(
+	m_index_buffer.Init(
 		dev->GetPtrDevice(),
 		size,
-		list
+		list,
+		D3D11_BIND_FLAG::D3D11_BIND_INDEX_BUFFER
 	);
 
 	// インプットレイアウト作成
@@ -72,7 +73,7 @@ VertexShader* vs
 }
 
 
-void Surface2D::CreatePolygon(CustomVertex2D cv[VERTEX_COUNT]) {
+void Surface2D::CreatePolygon(CustomVertexPosColor cv[VERTEX_COUNT]) {
 
 	
 	// 1番目

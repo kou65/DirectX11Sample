@@ -60,7 +60,7 @@ public:
 	* @brief 各デバイスの初期化
 	* @return bool 初期化成功=true 失敗=false
 	*/
-	bool Init(
+	bool Create(
 		const std::string&window_class_name,
 		bool is_window_mode = true
 	);
@@ -69,7 +69,7 @@ public:
 	/**
 	* @brief 各デバイスの解放
 	*/
-	void Release();
+	void Destroy();
 
 
 	/**

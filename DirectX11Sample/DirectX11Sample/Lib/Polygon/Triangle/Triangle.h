@@ -19,12 +19,14 @@ public:
 	*/
 	Triangle();
 
-	bool Create(ID3D11Device* device, VertexShader* vertex_shader);
+
+	bool Create(ID3D11Device* device, 
+		VertexShader* vertex_shader);
 
 private:
 
 
-	void SetUpTriangleVertex(CustomVertex2D cv[3]);
+	void SetUpTriangleVertex(CustomVertexPosColor cv[3]);
 
 private:
 };

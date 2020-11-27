@@ -3,12 +3,18 @@
 
 
 
-PolygonPrimitive::PolygonPrimitive() {
-
-	m_costom_vertex_size = sizeof(CustomVertex2D);
-	m_vertex_count = 3;
-	m_vertex_start = 0;
-	m_tepology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+PolygonPrimitive::PolygonPrimitive(
+	UINT costom_vertex_size,
+	UINT vertex_count,
+	UINT vertex_start,
+	D3D_PRIMITIVE_TOPOLOGY tepology
+) : 
+m_costom_vertex_size(costom_vertex_size),
+m_vertex_count(vertex_count),
+m_vertex_start(vertex_start),
+m_tepology(tepology) 
+{
+	mp_il = nullptr;
 }
 
 
@@ -35,11 +41,11 @@ D3D_PRIMITIVE_TOPOLOGY PolygonPrimitive::GetPrimitive() {
 }
 
 
-VertexBuffer PolygonPrimitive::GetVertexBuffer() {
-	return m_vb;
+Buffer *PolygonPrimitive::GetVertexBuffer() {
+	return &m_vertex_buffer;
 }
 
 
-ComPtr<ID3D11InputLayout> PolygonPrimitive::GetPtrInputLayout() {
+ID3D11InputLayout *PolygonPrimitive::GetPtrInputLayout() {
 	return mp_il;
 }

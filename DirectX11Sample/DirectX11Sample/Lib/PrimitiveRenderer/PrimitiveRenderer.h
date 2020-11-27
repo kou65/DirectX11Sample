@@ -3,11 +3,16 @@
 
 
 #include<memory>
+#include<DirectXMath.h>
 #include"../SingletonTemplate/SingletonTemplate.h"
 #include"../Polygon/PolygonPrimitive/PolygonPrimitive.h"
 #include"../Polygon/MeshPrimitive/MeshPrimitive.h"
 #include"../Shader/ShaderProcess/VertexShader/VertexShader.h"
-#include"../Shader/ShaderProcess/PixelShader/PixelShader.h"
+#include"../Shader/ConstantShader/ConstantShader.h"
+
+
+
+using namespace DirectX;
 
 
 
@@ -27,7 +32,7 @@ public:
 	/**
 	* @brief 初期化
 	*/
-	bool Init();
+	bool Create();
 
 
 	/**
@@ -37,15 +42,19 @@ public:
 		ID3D11DeviceContext* p_context,
 		ID3D11RenderTargetView* p_render_target,
 		ID3D11DepthStencilView* p_depth_stencile,
-		PolygonPrimitive* pol
+		PolygonPrimitive* pol,
+		ConstantShader::VSType vs_type,
+		ConstantShader::PSType ps_type
 	);
 
 
 	/**
 	* @brief デバイスの情報を使ったポリゴン描画
 	*/
-	void RenderingPolygonDev(
-		PolygonPrimitive* pol
+	void RenderingPolygonByDeviceView(
+		PolygonPrimitive* pol,
+		ConstantShader::VSType vs_type,
+		ConstantShader::PSType ps_type
 	);
 
 
@@ -56,14 +65,27 @@ public:
 		ID3D11DeviceContext* p_context,
 		ID3D11RenderTargetView* p_render_target,
 		ID3D11DepthStencilView* p_depth_stencile,
-		MeshPrimitive* mesh
+		MeshPrimitive* mesh,
+		ConstantShader::VSType vs_type,
+		ConstantShader::PSType ps_type
 	);
+
 
 	/**
 	* @brief デバイスの情報を使ったメッシュ描画
 	*/
-	void RenderingMeshDev(
-		MeshPrimitive* mesh
+	void RenderingMeshByDeviceView(
+		MeshPrimitive* mesh,
+		ConstantShader::VSType vs_type,
+		ConstantShader::PSType ps_type
+	);
+
+
+	/**
+	* @brief 後始末
+	*/
+	void ClearRenderingInfo(
+		ID3D11DeviceContext* p_context
 	);
 
 
@@ -72,10 +94,6 @@ public:
 	*/
 	void SetUpRasterizer();
 
-
-	VertexShader* GetPtrVertexShader(){
-		return mp_vs.get();
-	}
 
 private:
 
@@ -86,14 +104,11 @@ private:
 
 private:
 
-	//! 頂点シェーダー
-	std::unique_ptr<VertexShader>mp_vs;
-
-	//! ピクセルシェーダー
-	std::unique_ptr<PixelShader>mp_ps;
 
 	//! ラスタライザステート
 	ID3D11RasterizerState *mp_ras_state;
+
+
 };
 
 

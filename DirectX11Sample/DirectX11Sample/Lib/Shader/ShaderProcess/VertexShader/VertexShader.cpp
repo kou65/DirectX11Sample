@@ -1,5 +1,5 @@
 ﻿#include"VertexShader.h"
-
+#include<d3dcompiler.h>
 
 VertexShader::VertexShader() {
 

@@ -3,6 +3,9 @@
 #include"../Input/GamePad/GamePad.h"
 #include"../LibSingletonManager/LibSingletonManager.h"
 #include"../PrimitiveRenderer/PrimitiveRenderer.h"
+#include"../Shader/VertexShaderManager/VertexShaderManager.h"
+#include"../Shader/PixelShaderManager/PixelShaderManager.h"
+#include"../CreateShader/CreateShader.h"
 
 
 
@@ -30,12 +33,15 @@ bool Lib::Init() {
 	LibSingletonManager::GetInstance()->Create();
 
 	// デバイスの初期化
-	Device::GetInstance()->Init(
+	Device::GetInstance()->Create(
 		mp_window->GetWindowName()
 	);
 
+	// シェーダーファイルを各管理者に生成させる
+	CreateShader::Create();
+
 	// レンダラーの初期化
-	PrimitiveRenderer::GetInstance()->Init();
+	PrimitiveRenderer::GetInstance()->Create();
 
 	return true;
 }
@@ -54,9 +60,13 @@ bool Lib::Update() {
 
 void Lib::Release() {
 
+	// シェーダーファイル全て解放
+	VertexShaderManager::GetInstance()->DestroyEverything();
+	PixelShaderManager::GetInstance()->DestroyEverything();
+
 	// 解放
-	//Device::GetInstance()->Release();
+	Device::GetInstance()->Destroy();
 
 	// ライブラリ用のシングルトンを作成
-	//LibSingletonManager::GetInstance()->Destory();
+	LibSingletonManager::GetInstance()->Destroy();
 }

@@ -3,7 +3,7 @@
 
 #include<d3d11.h>
 #include<Wrl.h>
-#include"../../VertexBuffer/VertexBuffer.h"
+#include"../../Buffer/Buffer.h"
 
 
 //! DirectX版のスマートポインタ
@@ -21,7 +21,13 @@ public:
 	/**
 	* @brief コンストラクタ
 	*/
-	PolygonPrimitive();
+	PolygonPrimitive(
+		UINT m_costom_vertex_size,
+		UINT m_vertex_count,
+		UINT m_vertex_start,
+		D3D_PRIMITIVE_TOPOLOGY m_tepology = 
+			D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
+	);
 
 
 	/**
@@ -51,18 +57,18 @@ public:
 	/**
 	* @brief VertexBufferを返す
 	*/
-	VertexBuffer GetVertexBuffer();
+	Buffer *GetVertexBuffer();
 
 
 	/**
 	* @brief インプットレイアウトのポインタを返す
 	*/
-	ComPtr<ID3D11InputLayout> GetPtrInputLayout();
+	ID3D11InputLayout *GetPtrInputLayout();
 
 protected:
 
-	VertexBuffer m_vb;
-	ComPtr<ID3D11InputLayout>mp_il;
+	Buffer m_vertex_buffer;
+	ID3D11InputLayout *mp_il;
 
 	UINT m_costom_vertex_size;
 	UINT m_vertex_count;

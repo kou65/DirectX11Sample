@@ -54,7 +54,7 @@ private:
 	/**
 	* @brief ƒ|ƒŠƒSƒ“¶¬
 	*/
-	void CreatePolygon(CustomVertex2D cv[VERTEX_COUNT]);
+	void CreatePolygon(CustomVertexPosColor cv[VERTEX_COUNT]);
 
 
 	/**

@@ -1,51 +1,43 @@
 ﻿#include"PrimitiveRenderer.h"
 #include"../Device/Device.h"
 #include"../SingletonTemplate/SingletonTemplate.h"
+#include"../TransformMatrixData3D/TransformMatrixData3D.h"
+#include"../Shader/VertexShaderManager/VertexShaderManager.h"
+#include"../Shader/PixelShaderManager/PixelShaderManager.h"
 
+// 練習用
+void SetUpConstBuffer(
+	float aspect_width,
+	float aspect_height,
+	Buffer* p_c_b
+);
 
 
 PrimitiveRenderer::PrimitiveRenderer() {
 
+
 }
 
 
-bool PrimitiveRenderer::Init() {
-
-
-	mp_vs = std::make_unique<VertexShader>();
-	mp_ps = std::make_unique<PixelShader>();
-
-	// バーテックスシェーダー作成
-	if (
-		mp_vs->Create(
-			Device::GetInstance()->GetPtrDevice(),
-			"Lib/Shader/CSO/VertexShader.cso"
-		) == false) {
-		return false;
-	}
-
-	// ピクセルシェーダー作成
-	if (
-		mp_ps->Create(
-			Device::GetInstance()->GetPtrDevice(),
-			"Lib/Shader/CSO/PixelShader.cso"
-		) == false) {
-		return false;
-	}
+bool PrimitiveRenderer::Create() {
 
 	return true;
 }
 
 
-void PrimitiveRenderer::RenderingPolygonDev(
-	PolygonPrimitive* pol
+void PrimitiveRenderer::RenderingPolygonByDeviceView(
+	PolygonPrimitive* pol,
+	ConstantShader::VSType vs_type,
+	ConstantShader::PSType ps_type
 ) {
 
 	RenderingPolygon(
 		Device::GetInstance()->GetPtrImmContext(),
 		Device::GetInstance()->GetPtrRenderTargetView(),
 		Device::GetInstance()->GetPtrDepthStencilView(),
-		pol
+		pol,
+		vs_type,
+		ps_type
 	);
 }
 
@@ -54,7 +46,9 @@ void PrimitiveRenderer::RenderingPolygon(
 	ID3D11DeviceContext*p_context,
 	ID3D11RenderTargetView*p_render_target,
 	ID3D11DepthStencilView*p_depth_stencile,
-    PolygonPrimitive* pol
+    PolygonPrimitive* pol,
+	ConstantShader::VSType vs_type,
+	ConstantShader::PSType ps_type
 ) {
 
 	// ポリゴンの描画で必要なことは
@@ -64,13 +58,13 @@ void PrimitiveRenderer::RenderingPolygon(
 
 	UINT offsets = 0;
 
-	ID3D11Buffer* buff = 
-		pol->GetVertexBuffer().GetBuffer();
+	ID3D11Buffer * buff = 
+		pol->GetVertexBuffer()->GetBuffer();
 
 
 	// 描画で使用する入力レイアウトを設定する
 	p_context->IASetInputLayout(
-		pol->GetPtrInputLayout().Get()
+		pol->GetPtrInputLayout()
 	);
 
 	// レンダリングパイプラインで描画する頂点バッファを指定する
@@ -94,17 +88,20 @@ void PrimitiveRenderer::RenderingPolygon(
 
 	// バーテックスシェーダーをセットする
 	p_context->VSSetShader(
-		mp_vs->GetInterfacePtr(),
+		VertexShaderManager::GetInstance()->
+		GetPtr(ConstantShader::VSType::NORMAL)->GetInterfacePtr(),
 		NULL,
 		0
 	);
 
 	// ピクセルシェーダーをセットする
 	p_context->PSSetShader(
-		mp_ps->GetInterfacePtr(),
+		PixelShaderManager::GetInstance()->
+		GetPtr(ConstantShader::PSType::NORMAL)->GetInterfacePtr(),
 		NULL,
 		0
 	);
+
 
 	// 描画処理の出力先ビューの設定
 	p_context->OMSetRenderTargets(
@@ -115,8 +112,15 @@ void PrimitiveRenderer::RenderingPolygon(
 
 	// 頂点描画
 	p_context->Draw(
-		pol->GetVertexCount(), // 頂点の数
-		pol->GetStartVertex()  // 頂点バッファの描画開始インデックス
+		// 頂点の数
+		pol->GetVertexCount(), 
+		// 頂点バッファの描画開始インデックス
+		pol->GetStartVertex()  
+	);
+
+
+	ClearRenderingInfo(
+		p_context
 	);
 }
 
@@ -125,7 +129,9 @@ void PrimitiveRenderer::RenderingMesh(
 	ID3D11DeviceContext* p_context,
 	ID3D11RenderTargetView* p_render_target,
 	ID3D11DepthStencilView* p_depth_stencile,
-	MeshPrimitive* mesh
+	MeshPrimitive* mesh,
+	ConstantShader::VSType vs_type,
+	ConstantShader::PSType ps_type
 ) {
 
 
@@ -136,20 +142,23 @@ void PrimitiveRenderer::RenderingMesh(
 
 	// 描画で使用する入力レイアウトを設定する
 	p_context->IASetInputLayout(
-		mesh->GetPtrInputLayout().Get()
+		mesh->GetPtrInputLayout()
 	);
 
 
 	// バーテックスシェーダーをセットする
 	p_context->VSSetShader(
-		mp_vs->GetInterfacePtr(),
+		VertexShaderManager::GetInstance()->
+		GetPtr(vs_type)->GetInterfacePtr(),
 		NULL,
 		0
 	);
 
+
 	// ピクセルシェーダーをセットする
 	p_context->PSSetShader(
-		mp_ps->GetInterfacePtr(),
+		PixelShaderManager::GetInstance()->
+		GetPtr(ps_type)->GetInterfacePtr(),
 		NULL,
 		0
 	);
@@ -161,17 +170,20 @@ void PrimitiveRenderer::RenderingMesh(
 		p_depth_stencile
 	);
 
-	ID3D11Buffer* p_buf =
-		mesh->GetVertexBuffer().GetBuffer();
+	// メッシュ
+	ID3D11Buffer* p_buf = 
+		mesh->GetVertexBuffer()->GetBuffer();
 
 	// バーテックスバッファのセット
 	p_context->IASetVertexBuffers(
-		0, 1, &p_buf, &strides, 
+		0,
+		1,
+		&p_buf,
+		&strides, 
 		&offsets
 	);
 
-	ID3D11Buffer* p_ibuf =
-		mesh->GetIndexBuffer().GetBuffer();
+	ID3D11Buffer* p_ibuf = mesh->GetIndexBuffer()->GetBuffer();
 
 	// インデックスバッファのセット
 	p_context->
@@ -181,6 +193,30 @@ void PrimitiveRenderer::RenderingMesh(
 			0
 		);
 
+	// 定数バッファ
+	ID3D11Buffer* p_vs_const_buffer =
+		VertexShaderManager::GetInstance()->
+		GetPtr(vs_type)->GetConstBuffer()->GetBuffer();
+
+	// vsコンスタントバッファセット
+	p_context->VSSetConstantBuffers(
+		0,
+		1,
+		&p_vs_const_buffer
+	);
+
+	ID3D11Buffer* p_ps_const_buffer =
+		PixelShaderManager::GetInstance()->
+		GetPtr(ps_type)->GetConstBuffer()->GetBuffer();
+
+		// psコンスタントバッファセット
+		p_context->PSSetConstantBuffers(
+			0,
+			1,
+			&p_ps_const_buffer
+		);
+
+
 	// 形状描画
 	p_context->
 		IASetPrimitiveTopology(
@@ -189,28 +225,60 @@ void PrimitiveRenderer::RenderingMesh(
 
 	// 配列描画
 	p_context->DrawIndexed(
-		(mesh->GetIndexCount()),
+		mesh->GetIndexCount(),
 		0, 
 		0
 	);
 
+
+	// レンダリング情報をクリアする
+	ClearRenderingInfo(
+		p_context
+	);
+
 }
 
 
-void PrimitiveRenderer::RenderingMeshDev(
-	MeshPrimitive* mesh
+void PrimitiveRenderer::RenderingMeshByDeviceView(
+	MeshPrimitive* mesh,
+	ConstantShader::VSType vs_type,
+	ConstantShader::PSType ps_type
 ) {
 
+	// メッシュの描画
 	RenderingMesh(
 		Device::GetInstance()->GetPtrImmContext(),
 		Device::GetInstance()->GetPtrRenderTargetView(),
 		Device::GetInstance()->GetPtrDepthStencilView(),
-		mesh
+		mesh,
+		vs_type,
+		ps_type
 	);
 }
 
 
+
+void PrimitiveRenderer::ClearRenderingInfo(
+	ID3D11DeviceContext* p_context
+) {
+
+	// nullを入れておく
+	//p_context->VSSetConstantBuffers(
+	//	0,
+	//	1,
+	//	NULL
+	//);
+	//
+	//p_context->PSSetConstantBuffers(
+	//	0,
+	//	1,
+	//	NULL
+	//);
+}
+
+
 void PrimitiveRenderer::SetUpRasterizer() {
+
 	D3D11_RASTERIZER_DESC rdc = { };
 	// 塗りつぶすかどうかを決める
 	rdc.FillMode = D3D11_FILL_SOLID;

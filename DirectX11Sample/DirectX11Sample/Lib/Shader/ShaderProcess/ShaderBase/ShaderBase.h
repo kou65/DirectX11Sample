@@ -5,9 +5,12 @@
 #include<stdio.h>
 #include<string>
 #include<wrl.h>
+#include"../../../Buffer/Buffer.h"
+
 
 
 using namespace Microsoft::WRL;
+
 
 
 /**
@@ -25,6 +28,12 @@ public:
 
 
 	/**
+	* @brief 仮想デストラクタ
+	*/
+	virtual ~ShaderBase();
+
+
+	/**
 	* @brief Create 作成
 	* @param[out] p_device デバイスポインタ
 	* @param[in] file_name ファイル名
@@ -35,15 +44,29 @@ public:
 	);
 
 
+	/**
+	* @brief データ
+	*/
 	inline const char* GetData()
 	{
 		return mp_data;
 	}
 
+
+	/**
+	* @brief サイズ
+	*/
 	inline long GetSize()
 	{
 		return m_size;
 	}
+
+
+	/**
+	* @brief 定数バッファを返す
+	*/
+	Buffer *GetConstBuffer();
+
 
 protected:
 
@@ -56,6 +79,7 @@ protected:
 	int LoadFile(
 		const std::string& file_name
 	);
+
 
 protected:
 
@@ -75,6 +99,9 @@ protected:
 
 	//! ファイルサイズ
 	long m_size;
+
+	// 定数バッファ
+	Buffer m_const_buffer;
 };
 
 #endif

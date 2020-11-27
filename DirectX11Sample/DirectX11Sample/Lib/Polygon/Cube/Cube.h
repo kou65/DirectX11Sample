@@ -5,7 +5,7 @@
 #include<DirectXMath.h>
 #include"../MeshPrimitive/MeshPrimitive.h"
 #include"../../Shader/ShaderProcess/VertexShader/VertexShader.h"
-
+#include"../../Buffer/Buffer.h"
 
 
 using namespace DirectX;
@@ -18,6 +18,9 @@ class Cube : public MeshPrimitive{
 public:
 
 
+	Cube();
+
+
 	/**
 	* @brief çÏê¨
 	*/
@@ -27,7 +30,20 @@ public:
 	);
 
 
-	void IndexListSet(WORD list[36]);
+	void InitIndexList(WORD list[36]);
+
+private:
+
+	void SetUpConstBuffer(
+		float aspect_width,
+		float aspect_height,
+		VertexShader* p_vs
+	);
+
+private:
+
+	static const int VERTEX_COUNT = 24;
+	static const int INDEX_COUNT = 36;
 
 private:
 
