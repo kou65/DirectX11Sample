@@ -48,6 +48,11 @@ namespace Math {
 	XMFLOAT3 CalcNormalize(const XMFLOAT3& vec1);
 
 
+	/**
+	* @param[in] radian ラジアン
+	* @param[in] x 原点x
+	* @param[in] y 原点y
+	*/
 	void Rotation2D(
 		float radian,
 		const float& cx,
@@ -56,6 +61,12 @@ namespace Math {
 		float &y
 	);
 
+
+	/**
+	* @param[in] radian ラジアン
+	* @param[in] x 現在位置x
+	* @param[in] y 現在位置y
+	*/
 	void Rotation2D2(
 		float radian,
 		float& x,

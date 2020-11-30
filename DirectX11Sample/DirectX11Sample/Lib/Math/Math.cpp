@@ -53,7 +53,11 @@ namespace Math {
 		float cos = cosf(radian);
 		float sin = sinf(radian);
 
-		// 回転公式
+		// 回転行列として定義されている
+		// cosθ - sinθ x
+		// sinθ - cosθ y
+
+		// 回転公式(加法定理)
 		x = (cos * cx) - (sin * cy);
 		y = (sin * cx) + (cos * cy);
 	}

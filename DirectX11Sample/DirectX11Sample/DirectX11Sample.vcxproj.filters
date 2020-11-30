@@ -96,6 +96,12 @@
     <ClCompile Include="Lib\Shader\Factory\VertexShaderFactory\VertexShaderFactory.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Lib\LightData\LightData.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\Camera3D\Camera3D.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lib\Device\Device.h">
@@ -203,10 +209,27 @@
     <ClInclude Include="Lib\Shader\Factory\PSFactoryBase\PSFactoryBase.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Lib\LightData\LightData.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\MaterialData\MaterialData.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\LightConstantBufferData\LightConstantBufferData.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\LightConstBuffer\LightConstBuffer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Camera3DData\Camera3DData.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Lib\Shader\ShaderFile\VertexShader.hlsl" />
     <FxCompile Include="Lib\Shader\ShaderFile\PixelShader.hlsl" />
     <FxCompile Include="Lib\Shader\ShaderFile\VS3D.hlsl" />
+    <FxCompile Include="Lib\Shader\ShaderFile\LightVertexShader.hlsl" />
+    <FxCompile Include="Lib\Shader\ShaderFile\LightPixelShader.hlsl" />
   </ItemGroup>
 </Project>

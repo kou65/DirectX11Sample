@@ -21,6 +21,8 @@ bool Buffer::Init(
 	D3D11_BIND_FLAG bind
 ) {
 
+	Release();
+
 	D3D11_BUFFER_DESC desc;
 	// 頂点バッファの初期化設定
 	desc.ByteWidth = size;
@@ -51,6 +53,8 @@ bool Buffer::Init(
 	D3D11_BIND_FLAG bind
 ) {
 
+	Release();
+
 	D3D11_BUFFER_DESC desc;
 
 	// 頂点バッファの初期化設定
@@ -76,6 +80,8 @@ bool Buffer::Init(
 	void* custom_vertex_list
 ) {
 
+	Release();
+
 	D3D11_SUBRESOURCE_DATA data;
 	// 初期化時に設定するバッファデータ
 	data.pSysMem = custom_vertex_list;
@@ -96,6 +102,8 @@ bool Buffer::Init(
 	const D3D11_BUFFER_DESC& desc,
 	const D3D11_SUBRESOURCE_DATA& res_data
 ) {
+
+	Release();
 
 	// 頂点バッファの生成
 	if (FAILED(dev->CreateBuffer(&desc, &res_data, &mp_buffer)))

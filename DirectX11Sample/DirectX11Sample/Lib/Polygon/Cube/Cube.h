@@ -5,10 +5,15 @@
 #include<DirectXMath.h>
 #include"../MeshPrimitive/MeshPrimitive.h"
 #include"../../Shader/ShaderProcess/VertexShader/VertexShader.h"
+#include"../../Shader/ShaderProcess/PixelShader/PixelShader.h"
 #include"../../Buffer/Buffer.h"
+#include"../../LightConstBuffer/LightConstBuffer.h"
+
 
 
 using namespace DirectX;
+
+
 
 /**
 * @class Cube
@@ -40,6 +45,15 @@ private:
 		VertexShader* p_vs
 	);
 
+	void SetUpLightDataConstBuffer(
+		float aspect_width,
+		float aspect_height,
+		VertexShader* p_vs,
+		PixelShader* p_ps
+	);
+
+	void SetCamera();
+
 private:
 
 	static const int VERTEX_COUNT = 24;
@@ -55,6 +69,9 @@ private:
 
 	// éÀâeçsóÒ
 	XMMATRIX proj_mat;
+
+
+	LightConstBuffer m_lc_buffer;
 };
 
 #endif

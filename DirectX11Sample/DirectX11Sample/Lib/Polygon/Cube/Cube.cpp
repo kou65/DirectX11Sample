@@ -4,6 +4,7 @@
 #include"../../CustomVertex/CustomVertex2D.h"
 #include"../../TransformMatrixData3D/TransformMatrixData3D.h"
 #include"../../Shader/VertexShaderManager/VertexShaderManager.h"
+#include"../../Math/Math.h"
 
 
 
@@ -127,7 +128,7 @@ bool Cube::Create(
 	D3D11_INPUT_ELEMENT_DESC g_VertexDesc[]{
 	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,    0,                            0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	{ "NORMAL",0,DXGI_FORMAT_R32G32B32_FLOAT,4*3,0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, ((3*3)), D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, ((4 * 3) + (4 * 3)), D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 
 	// インプットレイアウト作成
@@ -147,7 +148,7 @@ bool Cube::Create(
 	// 定数バッファを使えるようにする
 	vs->GetConstBuffer()->Init(
 		dev,
-		sizeof(TransformMatrixData3D),
+		sizeof(TS3DMatrixData),
 		D3D11_BIND_CONSTANT_BUFFER
 	);
 
@@ -214,7 +215,7 @@ void Cube::SetUpConstBuffer(
 			far_z
 		);
 
-	TransformMatrixData3D data;
+	TS3DMatrixData data;
 
 	XMStoreFloat4x4(&data.world, XMMatrixTranspose(world_matrix));
 	XMStoreFloat4x4(&data.view, XMMatrixTranspose(view_matrix));
@@ -230,5 +231,95 @@ void Cube::SetUpConstBuffer(
 		0,
 		0
 	);
+
+}
+
+
+void Cube::SetUpLightDataConstBuffer(
+	float aspect_width,
+	float aspect_height,
+	VertexShader* p_vs,
+	PixelShader* p_ps
+) {
+
+	// もし使っていたら解放して再度
+	// 定数バッファを使えるようにする
+	p_vs->GetConstBuffer()->Init(
+		Device::GetInstance()->GetPtrDevice(),
+		sizeof(LightConstBuffer),
+		D3D11_BIND_CONSTANT_BUFFER
+	);
+
+
+	// 定数バッファを使えるようにする
+	p_ps->GetConstBuffer()->Init(
+		Device::GetInstance()->GetPtrDevice(),
+		sizeof(LightConstBuffer),
+		D3D11_BIND_CONSTANT_BUFFER
+	);
+
+
+	TS3DMatrixData data;
+
+	{
+		// ワールド行列
+		XMMATRIX world_matrix =
+			XMMatrixTranslation(
+				0.f,
+				0.f,
+				0.f
+			);
+
+		// ビューの位置座標
+		XMVECTOR eye =
+			XMVectorSet(10.f, 2.f, -2.f, 0.f);
+
+		// 注視点
+		XMVECTOR focus =
+			XMVectorSet(0.f, 0.f, 0.f, 0.f);
+
+		// 上方向
+		XMVECTOR up =
+			XMVectorSet(0.f, 1.f, 0.f, 0.f);
+
+		// ビュー行列
+		XMMATRIX view_matrix =
+			XMMatrixLookAtLH(eye, focus, up);
+
+		// プロジェクションの角度
+		constexpr float fov_angle =
+			XMConvertToRadians(45.f);
+
+		// アスペクト比
+		float aspect =
+			aspect_width / aspect_height;
+
+		// 描画クリッピング距離
+		float near_z = 0.1f;
+		float far_z = 100.f;
+
+		XMMATRIX proj_matrix =
+			XMMatrixPerspectiveFovLH(
+				fov_angle,
+				aspect,
+				near_z,
+				far_z
+			);
+
+
+		XMStoreFloat4x4(&data.world, XMMatrixTranspose(world_matrix));
+		XMStoreFloat4x4(&data.view, XMMatrixTranspose(view_matrix));
+		XMStoreFloat4x4(&data.projection, XMMatrixTranspose(proj_matrix));
+	}
+
+
+	m_lc_buffer.World = data.world;
+	m_lc_buffer.View = data.view;
+	m_lc_buffer.Projection = data.projection;
+
+}
+
+
+void Cube::SetCamera() {
 
 }
