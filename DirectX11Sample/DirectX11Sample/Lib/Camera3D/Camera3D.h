@@ -5,7 +5,6 @@
 
 
 #include<DirectXMath.h>
-#include"../SingletonTemplate/SingletonTemplate.h"
 
 
 using namespace DirectX;
@@ -14,11 +13,8 @@ using namespace DirectX;
 /**
 * @brief カメラ3D
 */
-class Camera3D : public Singleton<Camera3D>{
+class Camera3D{
 public:
-
-
-	friend class Singleton<Camera3D>;
 
 
 	/**
@@ -45,10 +41,12 @@ private:
 		float x_rot_deg
 	);
 
+	// 水平アングル
 	float GetHAngle(
 		const XMFLOAT3& target_pos
 	);
 
+	// 縦方面アングル
 	float GetVAngle(
 		const XMFLOAT3& target_pos
 	);
