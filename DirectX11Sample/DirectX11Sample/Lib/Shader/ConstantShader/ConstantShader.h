@@ -13,6 +13,7 @@ namespace ConstantShader {
 	enum class VSType {
 		NORMAL,
 		VS3D,
+		VARIOUS_LIGHT,
 		TOTAL,
 	};
 
@@ -23,6 +24,7 @@ namespace ConstantShader {
 	*/
 	enum class PSType {
 		NORMAL,
+		VARIOUS_LIGHT,
 		TOTAL,
 	};
 }

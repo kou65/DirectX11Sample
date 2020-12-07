@@ -9,6 +9,7 @@ VertexShader* VertexShaderFactory::Create(
 
 	switch (vs_type)
 	{
+
 	case ConstantShader::VSType::NORMAL:
 		return new VertexShader();
 

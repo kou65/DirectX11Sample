@@ -69,7 +69,7 @@ public:
 	/**
 	* @brief 各デバイスの解放
 	*/
-	void Destroy();
+	void DestroyEverything();
 
 
 	/**

@@ -12,6 +12,7 @@ PixelShader* PixelShaderFactory::Create(
 	case ConstantShader::PSType::NORMAL:
 		return new PixelShader();
 
+
 	default:
 		// 生成物なし
 		return nullptr;

@@ -8,6 +8,8 @@
 #include"../../Shader/ShaderProcess/PixelShader/PixelShader.h"
 #include"../../Buffer/Buffer.h"
 #include"../../LightConstBuffer/LightConstBuffer.h"
+#include"../../Camera3D/Camera3D.h"
+#include"../../TransformMatrixData3D/TransformMatrixData3D.h"
 
 
 
@@ -23,7 +25,12 @@ class Cube : public MeshPrimitive{
 public:
 
 
-	Cube();
+	/**
+	* @brief コンストラクタ
+	*/
+	Cube(
+		Camera3D* p_camera
+	);
 
 
 	/**
@@ -35,24 +42,38 @@ public:
 	);
 
 
+	/**
+	* @brief インデックスリストセット
+	*/
 	void InitIndexList(WORD list[36]);
+
+
+	/**
+	* @brief 更新関数
+	*/
+	void Update(
+		VertexShader* vs
+	);
+
+
+	/**
+	* @brief 変換行列を返す
+	*/
+	TS3DMatrixData GetTSMatrix(){
+		return m_ts_data;
+	}
+
 
 private:
 
+
+	/**
+	* @brief セットアップ定数バッファ
+	*/
 	void SetUpConstBuffer(
-		float aspect_width,
-		float aspect_height,
 		VertexShader* p_vs
 	);
 
-	void SetUpLightDataConstBuffer(
-		float aspect_width,
-		float aspect_height,
-		VertexShader* p_vs,
-		PixelShader* p_ps
-	);
-
-	void SetCamera();
 
 private:
 
@@ -61,17 +82,14 @@ private:
 
 private:
 
-	// ワールド行列
-	XMMATRIX world_mat;
+	// 現在位置
+	XMFLOAT3 m_pos;
 
-	// ビュー行列
-	XMMATRIX view_mat;
+	// 行列変換用
+	TS3DMatrixData m_ts_data;
 
-	// 射影行列
-	XMMATRIX proj_mat;
-
-
-	LightConstBuffer m_lc_buffer;
+	// カメラ
+	Camera3D *m_camera;
 };
 
 #endif

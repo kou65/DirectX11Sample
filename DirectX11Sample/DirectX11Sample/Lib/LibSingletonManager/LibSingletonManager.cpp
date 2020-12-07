@@ -5,6 +5,7 @@
 #include"../Shader/PixelShaderManager/PixelShaderManager.h"
 
 
+
 void LibSingletonManager::Create() {
 
 	// 各シングルトン作成
@@ -15,7 +16,7 @@ void LibSingletonManager::Create() {
 }
 
 
-void LibSingletonManager::Destroy() {
+void LibSingletonManager::DestroyEverything() {
 
 	// 各インスタンス解放
 	Device::DestroyInstance();

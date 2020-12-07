@@ -12,7 +12,11 @@ namespace CreateShader {
 
 	void CreateVS();
 
+	void InitVS();
+
 	void CreatePS();
+
+	void InitPS();
 }
 
 #endif

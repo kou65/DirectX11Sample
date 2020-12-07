@@ -56,7 +56,7 @@ out_put.color = input.color;
 // 移動が計算に反映させない
 input.nor.w = 0.f;
 
-// 頂点の法線にワールド行列を掛け合わせて
+// 頂点の法線にワールド行列(現在位置や回転)を掛け合わせて
 // ワールド座標上での法線の向きに変換する
 out_put.nor = mul(input.nor, world).xyzw;
 

@@ -44,8 +44,8 @@ public:
 
 	void Update();
 
-	bool Push(int nVirtKey) const;
 	bool Pushing(int nVirtKey) const;
+	bool Push(int nVirtKey) const;
 	bool Exit(int nVirtKey) const;
 
 

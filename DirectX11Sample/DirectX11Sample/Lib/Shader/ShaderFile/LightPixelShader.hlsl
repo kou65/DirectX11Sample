@@ -39,6 +39,7 @@ float4 main(PS_IN input) : SV_TARGET
 	float ambient_factor = MaterialAmbient[3];
 float diffuse_factor = MaterialDiffuse[3];
 
+
 float4 ambient_color = MaterialAmbient * ambient_factor;
 
 /*
@@ -48,7 +49,9 @@ float4 ambient_color = MaterialAmbient * ambient_factor;
 		input.nl => –@ü‚Æƒ‰ƒCƒg‚Ì“àÏŒ‹‰Ê
 	*/
 float4 diffuse_color =
-input.nl * (input.col * LightColor * MaterialDiffuse * diffuse_factor);
+input.nl * 
+(input.col * LightColor * MaterialDiffuse
+	* diffuse_factor);
 
 float4 out_color;
 

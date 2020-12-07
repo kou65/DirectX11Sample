@@ -65,8 +65,8 @@ void Lib::Release() {
 	PixelShaderManager::GetInstance()->DestroyEverything();
 
 	// 解放
-	Device::GetInstance()->Destroy();
+	Device::GetInstance()->DestroyEverything();
 
 	// ライブラリ用のシングルトンを作成
-	LibSingletonManager::GetInstance()->Destroy();
+	LibSingletonManager::GetInstance()->DestroyEverything();
 }

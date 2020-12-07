@@ -18,6 +18,10 @@
 class VertexShaderManager : public Singleton<VertexShaderManager> {
 public:
 
+
+	/**
+	* @brief フレンド
+	*/
 	friend class Singleton<VertexShaderManager>;
 
 
@@ -66,8 +70,11 @@ public:
 
 private:
 
+
+	//! バーテックスシェーダー
 	std::map<ConstantShader::VSType,VertexShader*>mp_vs_list;
 
+	//! 工場リスト
 	std::vector<std::unique_ptr<VSFactoryBase>>mp_vs_factory_list;
 };
 

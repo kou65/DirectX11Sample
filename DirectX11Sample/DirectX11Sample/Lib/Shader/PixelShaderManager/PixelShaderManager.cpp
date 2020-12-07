@@ -46,7 +46,7 @@ bool PixelShaderManager::Create(
 
 	// 生成物が見つかっていない
 	if (p_ps == nullptr) {
-		return false;
+		p_ps = new PixelShader();
 	}
 
 	// 生成

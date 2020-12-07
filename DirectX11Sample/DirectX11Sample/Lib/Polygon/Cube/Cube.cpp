@@ -8,10 +8,14 @@
 
 
 
-Cube::Cube() : MeshPrimitive(
+Cube::Cube(
+	Camera3D* p_camera
+) : MeshPrimitive(
 sizeof(CustomVertexPosNorCol),VERTEX_COUNT,0,INDEX_COUNT 
 ){
 
+	m_camera = p_camera;
+	m_pos = XMFLOAT3(0.f, 0.f, 0.f);
 }
 
 
@@ -115,14 +119,12 @@ bool Cube::Create(
 	// インデックスリストセット
 	InitIndexList(list);
 
-	UINT size = (sizeof(WORD) * INDEX_COUNT);
-
 	// インデックスバッファ
 	m_index_buffer.Init(
-		dev,
-		size,
-		list,
-		D3D11_BIND_FLAG::D3D11_BIND_INDEX_BUFFER
+		dev,                                     // デバイス
+		(sizeof(WORD) * INDEX_COUNT),            // サイズ
+		list,                                    // インデックスリスト
+		D3D11_BIND_FLAG::D3D11_BIND_INDEX_BUFFER // バッファの使い方
 	);
 
 	D3D11_INPUT_ELEMENT_DESC g_VertexDesc[]{
@@ -144,82 +146,36 @@ bool Cube::Create(
 		return false;
 	}
 
-
-	// 定数バッファを使えるようにする
-	vs->GetConstBuffer()->Init(
-		dev,
-		sizeof(TS3DMatrixData),
-		D3D11_BIND_CONSTANT_BUFFER
-	);
-
-	float width = 1920;
-	float height = 1080;
-
-	SetUpConstBuffer(
-		width,
-		height,
-		vs
-	);
-
 	return true;
 }
 
 
+void Cube::Update(
+	VertexShader* vs
+) {
+
+	// 定数バッファ
+	SetUpConstBuffer(
+		vs
+	);
+}
+
+
 void Cube::SetUpConstBuffer(
-	float aspect_width,
-	float aspect_height,
 	VertexShader*p_vs
 ) {
 
 	// ワールド行列
 	XMMATRIX world_matrix = 
 		XMMatrixTranslation(
-			0.f,
-			0.f,
-			0.f
+			m_pos.x,
+			m_pos.y,
+			m_pos.z
 		);
 
-	// ビューの位置座標
-	XMVECTOR eye = 
-		XMVectorSet(10.f, 2.f, -2.f, 0.f);
-
-	// 注視点
-	XMVECTOR focus = 
-		XMVectorSet(0.f, 0.f, 0.f, 0.f);
-
-	// 上方向
-	XMVECTOR up = 
-		XMVectorSet(0.f, 1.f, 0.f, 0.f);
-
-	// ビュー行列
-	XMMATRIX view_matrix = 
-		XMMatrixLookAtLH(eye, focus, up);
-
-	// プロジェクションの角度
-	constexpr float fov_angle = 
-		XMConvertToRadians(45.f);
-
-	// アスペクト比
-	float aspect = 
-		aspect_width / aspect_height;
-
-	// 描画クリッピング距離
-	float near_z = 0.1f;
-	float far_z = 100.f;
-
-	XMMATRIX proj_matrix =
-		XMMatrixPerspectiveFovLH(
-			fov_angle, 
-			aspect,
-			near_z,
-			far_z
-		);
-
-	TS3DMatrixData data;
-
-	XMStoreFloat4x4(&data.world, XMMatrixTranspose(world_matrix));
-	XMStoreFloat4x4(&data.view, XMMatrixTranspose(view_matrix));
-	XMStoreFloat4x4(&data.projection, XMMatrixTranspose(proj_matrix));
+	XMStoreFloat4x4(&m_ts_data.world, XMMatrixTranspose(world_matrix));
+	m_ts_data.view = m_camera->GetViewTransposeMatrix();
+	m_ts_data.projection = m_camera->GetProjTransposeMatrix();
 
 	// リソースデータを受け取る
 	Device::GetInstance()->GetPtrImmContext()->
@@ -227,99 +183,10 @@ void Cube::SetUpConstBuffer(
 		p_vs->GetConstBuffer()->GetBuffer(),
 		0,
 		NULL,
-		&data,
+		&m_ts_data,
 		0,
 		0
 	);
 
 }
 
-
-void Cube::SetUpLightDataConstBuffer(
-	float aspect_width,
-	float aspect_height,
-	VertexShader* p_vs,
-	PixelShader* p_ps
-) {
-
-	// もし使っていたら解放して再度
-	// 定数バッファを使えるようにする
-	p_vs->GetConstBuffer()->Init(
-		Device::GetInstance()->GetPtrDevice(),
-		sizeof(LightConstBuffer),
-		D3D11_BIND_CONSTANT_BUFFER
-	);
-
-
-	// 定数バッファを使えるようにする
-	p_ps->GetConstBuffer()->Init(
-		Device::GetInstance()->GetPtrDevice(),
-		sizeof(LightConstBuffer),
-		D3D11_BIND_CONSTANT_BUFFER
-	);
-
-
-	TS3DMatrixData data;
-
-	{
-		// ワールド行列
-		XMMATRIX world_matrix =
-			XMMatrixTranslation(
-				0.f,
-				0.f,
-				0.f
-			);
-
-		// ビューの位置座標
-		XMVECTOR eye =
-			XMVectorSet(10.f, 2.f, -2.f, 0.f);
-
-		// 注視点
-		XMVECTOR focus =
-			XMVectorSet(0.f, 0.f, 0.f, 0.f);
-
-		// 上方向
-		XMVECTOR up =
-			XMVectorSet(0.f, 1.f, 0.f, 0.f);
-
-		// ビュー行列
-		XMMATRIX view_matrix =
-			XMMatrixLookAtLH(eye, focus, up);
-
-		// プロジェクションの角度
-		constexpr float fov_angle =
-			XMConvertToRadians(45.f);
-
-		// アスペクト比
-		float aspect =
-			aspect_width / aspect_height;
-
-		// 描画クリッピング距離
-		float near_z = 0.1f;
-		float far_z = 100.f;
-
-		XMMATRIX proj_matrix =
-			XMMatrixPerspectiveFovLH(
-				fov_angle,
-				aspect,
-				near_z,
-				far_z
-			);
-
-
-		XMStoreFloat4x4(&data.world, XMMatrixTranspose(world_matrix));
-		XMStoreFloat4x4(&data.view, XMMatrixTranspose(view_matrix));
-		XMStoreFloat4x4(&data.projection, XMMatrixTranspose(proj_matrix));
-	}
-
-
-	m_lc_buffer.World = data.world;
-	m_lc_buffer.View = data.view;
-	m_lc_buffer.Projection = data.projection;
-
-}
-
-
-void Cube::SetCamera() {
-
-}

@@ -3,7 +3,6 @@
 
 
 Key::Key() {
-
 }
 
 void Key::Update() {
@@ -12,12 +11,12 @@ void Key::Update() {
 }
 
 
-bool Key::Push(int nVirtKey) const {
+bool Key::Pushing(int nVirtKey) const {
 	return TestBit(m_key_list[0][nVirtKey]);
 }
 
 
-bool Key::Pushing(int nVirtKey) const {
+bool Key::Push(int nVirtKey) const {
 	return TestBit(m_key_list[0][nVirtKey]) && !TestBit(m_key_list[1][nVirtKey]);
 }
 

@@ -1,6 +1,9 @@
 ﻿#include"VertexShaderManager.h"
 #include"../../Device/Device.h"
 #include"../Factory/VertexShaderFactory/VertexShaderFactory.h"
+#include"../../Device/Device.h"
+#include"../../TransformMatrixData3D/TransformMatrixData3D.h"
+#include"../../LightConstBuffer/LightConstBuffer.h"
 
 
 
@@ -45,7 +48,9 @@ bool VertexShaderManager::Create(
 
 	// 生成物が見つかっていない
 	if (p_vs == nullptr) {
-		return false;
+
+		// 既存の頂点シェーダーを生成する
+		p_vs = new VertexShader();
 	}
 
 	// 生成

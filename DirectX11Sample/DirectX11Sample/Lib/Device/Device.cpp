@@ -43,7 +43,7 @@ bool Device::Create(
 }
 
 
-void Device::Destroy() {
+void Device::DestroyEverything() {
 
 	/* 
 	   Release関数を呼びAddRefされて加算されていた
