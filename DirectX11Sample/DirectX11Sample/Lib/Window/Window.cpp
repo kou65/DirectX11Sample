@@ -38,6 +38,7 @@ bool Window::Create()
 		return false;
 	}
 
+	const wchar_t *w = L"f";
 
 	// ウィンドウ作成
 	HWND window_handle = CreateWindowA(
@@ -51,7 +52,8 @@ bool Window::Create()
 		NULL,
 		NULL,
 		GetModuleHandle(NULL),
-		NULL);
+		NULL
+	);
 
 	if (window_handle == NULL)
 	{

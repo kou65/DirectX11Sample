@@ -237,5 +237,7 @@
     <FxCompile Include="Lib\Shader\ShaderFile\VS3D.hlsl" />
     <FxCompile Include="Lib\Shader\ShaderFile\LightVertexShader.hlsl" />
     <FxCompile Include="Lib\Shader\ShaderFile\LightPixelShader.hlsl" />
+    <FxCompile Include="Lib\Shader\ShaderFile\SpotLightVertex.hlsl" />
+    <FxCompile Include="Lib\Shader\ShaderFile\SpotLightPixel.hlsl" />
   </ItemGroup>
 </Project>
