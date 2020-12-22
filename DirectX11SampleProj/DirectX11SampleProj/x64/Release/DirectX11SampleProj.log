@@ -1,0 +1,52 @@
+﻿  compilation object save succeeded; see C:\Users\前川　洸太郎\Documents\DirectX11Sample\DirectX11SampleProj\x64\Release\LightPixelShader.cso
+  compilation object save succeeded; see C:\Users\前川　洸太郎\Documents\DirectX11Sample\DirectX11SampleProj\x64\Release\LightVertexShader.cso
+  compilation object save succeeded; see C:\Users\前川　洸太郎\Documents\DirectX11Sample\DirectX11SampleProj\x64\Release\PixelShader.cso
+  compilation object save succeeded; see C:\Users\前川　洸太郎\Documents\DirectX11Sample\DirectX11SampleProj\x64\Release\SpotLightPixel.cso
+C:\Users\�O��@�����Y\Documents\DirectX11Sample\DirectX11SampleProj\DirectX11SampleProj\Source\Lib\Shader\ShaderFile\SpotLightVertex.hlsl(109,9-32): warning X3206: implicit truncation of vector type
+C:\Users\�O��@�����Y\Documents\DirectX11Sample\DirectX11SampleProj\DirectX11SampleProj\Source\Lib\Shader\ShaderFile\SpotLightVertex.hlsl(43,11-24): warning X3578: Output value 'main' is not completely initialized
+C:\Users\�O��@�����Y\Documents\DirectX11Sample\DirectX11SampleProj\DirectX11SampleProj\Source\Lib\Shader\ShaderFile\SpotLightVertex.hlsl(99,19): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+C:\Users\�O��@�����Y\Documents\DirectX11Sample\DirectX11SampleProj\DirectX11SampleProj\Source\Lib\Shader\ShaderFile\SpotLightVertex.hlsl(43,11-24): warning X3578: Output value 'main' is not completely initialized
+  
+  compilation object save succeeded; see C:\Users\前川　洸太郎\Documents\DirectX11Sample\DirectX11SampleProj\x64\Release\SpotLightVertex.cso
+  compilation object save succeeded; see C:\Users\前川　洸太郎\Documents\DirectX11Sample\DirectX11SampleProj\x64\Release\VertexShader.cso
+  compilation object save succeeded; see C:\Users\前川　洸太郎\Documents\DirectX11Sample\DirectX11SampleProj\x64\Release\VS2D.cso
+  compilation object save succeeded; see C:\Users\前川　洸太郎\Documents\DirectX11Sample\DirectX11SampleProj\x64\Release\VS3D.cso
+  BufferTemplate.cpp
+  Camera3D.cpp
+  CreateShader.cpp
+  Device.cpp
+  Key.cpp
+  Mouse.cpp
+  IOFunction.cpp
+  LibSingletonManager.cpp
+  Lib.cpp
+  LightData.cpp
+  Light.cpp
+  Main.cpp
+  Math.cpp
+  OBJFile.cpp
+  Cube.cpp
+  ModelManager.cpp
+  Model.cpp
+  Quad.cpp
+  Triangle.cpp
+  PrimitiveRenderer.cpp
+  コンパイル中...
+  PixelShaderFactory.cpp
+  VertexShaderFactory.cpp
+  PixelShaderManager.cpp
+  PixelShader.cpp
+  ShaderBase.cpp
+  VertexShader.cpp
+  VS3D.cpp
+  VertexShaderManager.cpp
+  ViewManager.cpp
+  ViewPortManager.cpp
+  WindowsSystem.cpp
+  Window.cpp
+C:\Users\前川　洸太郎\Documents\DirectX11Sample\DirectX11SampleProj\DirectX11SampleProj\Source\Lib\Window\Window.cpp(80,18): warning C4302: '型キャスト': 'LPWSTR' から 'WORD' へ切り詰めます。
+  コード生成しています。
+  Previous IPDB not found, fall back to full compilation.
+  All 1603 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  コード生成が終了しました。
+  DirectX11SampleProj.vcxproj -> C:\Users\前川　洸太郎\Documents\DirectX11Sample\DirectX11SampleProj\x64\Release\DirectX11SampleProj.exe
